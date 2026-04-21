@@ -1,9 +1,9 @@
 import 'package:client_app/controller/auth/login_controller.dart';
 import 'package:client_app/core/servers/app_servers.dart';
-import 'package:client_app/screen/widget/auth/Otp%20Verification/otp_input_field.dart';
-import 'package:client_app/screen/widget/auth/Otp%20Verification/resend_code_section.dart';
-import 'package:client_app/screen/widget/auth/Otp%20Verification/verification_prompt.dart';
-import 'package:client_app/screen/widget/auth/Otp%20Verification/verify_button.dart';
+import 'package:client_app/screen/widget/auth/OtpVerification/otp_input_field.dart';
+import 'package:client_app/screen/widget/auth/OtpVerification/resend_code_section.dart';
+import 'package:client_app/screen/widget/auth/OtpVerification/verification_prompt.dart';
+import 'package:client_app/screen/widget/auth/OtpVerification/verify_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

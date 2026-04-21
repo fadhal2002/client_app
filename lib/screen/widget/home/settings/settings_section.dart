@@ -1,11 +1,10 @@
-import 'package:client_app/screen/view/home/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 
-class BuildSettingsSection extends StatelessWidget {
+class SettingsSection extends StatelessWidget {
   final String title;
   final List<SettingsItem> items;
 
-  const BuildSettingsSection({
+  const SettingsSection({
     super.key,
     required this.title,
     required this.items,

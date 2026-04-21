@@ -3,7 +3,7 @@ import 'package:client_app/core/functions/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/widget/auth/Login/phone_number_input.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
-import 'package:client_app/screen/widget/auth/User%20Name/name_field.dart';
+import 'package:client_app/screen/widget/auth/UserName/name_field.dart';
 import 'package:client_app/screen/widget/header_ilustration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

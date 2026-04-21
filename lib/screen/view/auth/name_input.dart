@@ -2,7 +2,7 @@ import 'package:client_app/controller/auth/login_controller.dart';
 import 'package:client_app/core/functions/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
-import 'package:client_app/screen/widget/auth/User%20Name/name_field.dart';
+import 'package:client_app/screen/widget/auth/UserName/name_field.dart';
 import 'package:client_app/screen/widget/header_ilustration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,10 +56,7 @@ class NameInput extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              NameField(
-                name: 'Last Name',
-                icon: Icons.badge,
-              ),
+              NameField(name: 'Last Name', icon: Icons.badge),
 
               const SizedBox(height: 32),
 

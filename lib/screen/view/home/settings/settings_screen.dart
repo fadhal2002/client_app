@@ -1,6 +1,6 @@
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/widget/home/settings/profile_section.dart';
-import 'package:client_app/screen/widget/home/settings/build_settings_section.dart';
+import 'package:client_app/screen/widget/home/settings/settings_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 24),
 
           // Settings Sections
-          BuildSettingsSection(
+          SettingsSection(
             title: 'Preferences',
             items: [
               SettingsItem(
@@ -44,38 +44,27 @@ class SettingsScreen extends StatelessWidget {
                   Get.toNamed('/LanguageScreen');
                 },
               ),
-              SettingsItem(
-                icon: Icons.notifications_none_outlined,
-                title: 'Notifications',
-                subtitle: 'Daily reminders',
-                onTap: () {
-                  AppServices appServices = Get.find<AppServices>();
-                  appServices.shared.clear();
-                  Get.toNamed('/LoginScreen');
-                },
-              ),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          BuildSettingsSection(
+          SettingsSection(
             title: 'Support',
             items: [
               SettingsItem(
                 icon: Icons.help_outline,
                 title: 'Help Center',
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed('/HelpCenterScreen');
+                },
               ),
               SettingsItem(
-                icon: Icons.feedback_outlined,
-                title: 'Send Feedback',
-                onTap: () {},
-              ),
-              SettingsItem(
-                icon: Icons.star_outline,
-                title: 'Rate the App',
-                onTap: () {},
+                icon: Icons.info_outline,
+                title: "About Us",
+                onTap: () {
+                  Get.toNamed('/AboutUsScreen');
+                },
               ),
             ],
           ),
