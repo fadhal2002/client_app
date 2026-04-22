@@ -22,6 +22,8 @@ abstract class Logincontroller extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   AppServices appServices = Get.find<AppServices>();
+
+  
 }
 
 class LogincontrollerImp extends Logincontroller {
