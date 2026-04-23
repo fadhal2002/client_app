@@ -62,13 +62,7 @@ class NameInput extends StatelessWidget {
 
               ContinueButton(
                 onTap: () {
-                  if (controller.firstName.text.isEmpty ||
-                      controller.lastName.text.isEmpty) {
-                    customSnackbar(
-                      'Error',
-                      'Please enter both first and last names.',
-                    );
-                  } else {
+                 
                     customSnackbar('Success', 'Names saved successfully!');
                     appServices.shared.setString(
                       'firstName',
@@ -84,7 +78,7 @@ class NameInput extends StatelessWidget {
                     );
                     appServices.shared.setString('screen', 'homePage');
                     Get.toNamed('/HomePageState');
-                  }
+                  
                 },
               ),
             ],
