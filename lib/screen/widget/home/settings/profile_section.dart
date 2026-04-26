@@ -41,7 +41,7 @@ class ProfileSection extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  '${appServices.shared.getString("firstName")![0]}${appServices.shared.getString("lastName")![0]}'
+                  ''
                       .toUpperCase(),
                   style: const TextStyle(
                     fontSize: 20,

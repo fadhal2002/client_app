@@ -62,8 +62,6 @@ class NameInput extends StatelessWidget {
 
               ContinueButton(
                 onTap: () {
-                  print('First Name: ${controller.firstName.text}');
-                  print('Last Name: ${controller.lastName.text}');
                   if (controller.firstName.text.isEmpty ||
                       controller.lastName.text.isEmpty) {
                     customSnackbar(
