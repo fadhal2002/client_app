@@ -2,7 +2,6 @@ import 'package:client_app/controller/auth/login_controller.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class NameField extends StatelessWidget {
   IconData icon;
@@ -52,11 +51,9 @@ class NameField extends StatelessWidget {
             ],
           ),
           child: TextField(
-            controller: appServices.shared.getString('firstName') != null
-                ? TextEditingController(
-                    text: appServices.shared.getString('firstName'),
-                  )
-                : null,
+            controller: name == 'First Name'
+                ? Get.find<LogincontrollerImp>().firstName
+                : Get.find<LogincontrollerImp>().lastName,
             decoration: InputDecoration(
               hintText: 'Enter your ${name.toLowerCase()}',
               hintStyle: TextStyle(fontSize: 14, color: Colors.grey[400]),

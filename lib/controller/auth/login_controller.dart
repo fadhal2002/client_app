@@ -22,16 +22,20 @@ abstract class Logincontroller extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   AppServices appServices = Get.find<AppServices>();
-
-  
 }
 
 class LogincontrollerImp extends Logincontroller {
   @override
   void onInit() {
-    phoneNumber = TextEditingController();
-    firstName = TextEditingController();
-    lastName = TextEditingController();
+    phoneNumber = TextEditingController(
+      text: appServices.shared.getString('phoneNumber') ?? '',
+    );
+    firstName = TextEditingController(
+      text: appServices.shared.getString('firstName') ?? '',
+    );
+    lastName = TextEditingController(
+      text: appServices.shared.getString('lastName') ?? '',
+    );
     super.onInit();
   }
 
@@ -40,10 +44,11 @@ class LogincontrollerImp extends Logincontroller {
       appServices.shared.setString("phoneNumber", phoneNumber.text.trim());
       Get.toNamed('/OtpVerification');
     } else {
-      customSnackbar(
-        'Invalid Phone Number',
-        'Please enter a valid phone number',
-      );
+      // customSnackbar(
+
+      //   'Invalid Phone Number',
+      //   'Please enter a valid phone number',
+      // );
     }
     update();
   }
@@ -77,10 +82,10 @@ class LogincontrollerImp extends Logincontroller {
   void resendCode() {
     if (isResendEnabled.value) {
       startCountdown();
-      customSnackbar(
-        'Code Resent',
-        'A new verification code has been sent to your WhatsApp',
-      );
+      // customSnackbar(
+      //   'Code Resent',
+      //   'A new verification code has been sent to your WhatsApp',
+      // );
     }
   }
 }

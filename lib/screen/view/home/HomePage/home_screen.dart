@@ -187,7 +187,9 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.history,
                     title: 'History',
                     color: const Color(0xFFFF9800),
-                    onTap: () {},
+                    onTap: () {
+                      
+                    },
                   ),
                   const SizedBox(width: 12),
                   _buildQuickAction(

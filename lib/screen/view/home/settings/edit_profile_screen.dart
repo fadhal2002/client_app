@@ -87,11 +87,16 @@ class EditProfileScreen extends StatelessWidget {
                   if (controller.firstName.text.isEmpty ||
                       controller.lastName.text.isEmpty) {
                     customSnackbar(
+                      context,
                       'Error',
                       'Please enter both first and last names.',
                     );
                   } else {
-                    customSnackbar('Success', 'Names saved successfully!');
+                    customSnackbar(
+                      context,
+                      'Success',
+                      'Names saved successfully!',
+                    );
                     appServices.shared.setString(
                       'firstName',
                       controller.firstName.text.trim(),
@@ -105,7 +110,7 @@ class EditProfileScreen extends StatelessWidget {
                       controller.phoneNumber.text.trim(),
                     );
                     appServices.shared.setString('screen', 'homePage');
-                    // Get.toNamed('/HomePageState');
+                    Get.toNamed('/HomePageState');
                   }
                 },
               ),

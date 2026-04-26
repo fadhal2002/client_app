@@ -9,7 +9,7 @@ class MyMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     if (appServices.shared.getString('screen') == 'homePage') {
-      return const RouteSettings(name: '/HomePageState');
+      return const RouteSettings(name: '/LoginScreen');
     }
     return null;
   }

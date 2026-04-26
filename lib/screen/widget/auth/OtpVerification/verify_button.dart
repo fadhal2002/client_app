@@ -12,10 +12,10 @@ class VerifyButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         if (controller.UserEnteredCode == controller.VerificationCode) {
-          customSnackbar('Success', 'OTP Verified Successfully');
+          customSnackbar(context, 'Success', 'OTP Verified Successfully');
           Get.toNamed('/NameInput');
         } else {
-          customSnackbar('Error', 'Invalid OTP. Please try again.');
+          customSnackbar(context, 'Error', 'Invalid OTP. Please try again.');
         }
       },
       style: ElevatedButton.styleFrom(
