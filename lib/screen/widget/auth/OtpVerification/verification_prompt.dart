@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class VerificationPrompt extends StatelessWidget {
   final String? phoneNumber;
-  
+
   const VerificationPrompt({
     super.key,
     this.phoneNumber,
@@ -28,7 +28,7 @@ class VerificationPrompt extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           const Text(
-            'Verify Your Number',
+            'تأكيد رقمك',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -38,7 +38,7 @@ class VerificationPrompt extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'We\'ve sent a verification code to',
+            'لقد أرسلنا رمز التحقق إلى',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white.withOpacity(0.9),
@@ -55,7 +55,7 @@ class VerificationPrompt extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'via WhatsApp',
+            'عبر واتساب',
             style: TextStyle(
               fontSize: 14,
               color: Colors.white.withOpacity(0.8),

@@ -18,11 +18,12 @@ class HelpCenterScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF1A1E2C)),
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
+            // Get.back();
           },
         ),
         title: const Text(
-          'Help Center',
+          'مركز المساعدة',
           style: TextStyle(
             color: Color(0xFF1A1E2C),
             fontWeight: FontWeight.w600,
@@ -36,9 +37,10 @@ class HelpCenterScreen extends StatelessWidget {
         child: Column(
           children: [
             HeaderIlustration(
-                title: 'How can we help you?',
-                subtitle: 'Get support or contact us',
-                icon: Icons.help_center_outlined),
+              title: 'كيف يمكننا مساعدتك؟',
+              subtitle: 'احصل على الدعم أو تواصل معنا',
+              icon: Icons.help_center_outlined,
+            ),
 
             const SizedBox(height: 24),
 
@@ -47,8 +49,8 @@ class HelpCenterScreen extends StatelessWidget {
               children: [
                 ContactCard(
                   icon: Icons.email_outlined,
-                  title: 'Email Support',
-                  subtitle: 'Send us an email',
+                  title: 'الدعم عبر البريد',
+                  subtitle: 'أرسل لنا رسالة',
                   detail: 'basfadl404@gmail.com',
                   color: const Color(0xFF4158D0),
                   type: 'email',
@@ -56,8 +58,8 @@ class HelpCenterScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 ContactCard(
                   icon: Icons.phone_outlined,
-                  title: 'Call Us',
-                  subtitle: 'Speak with us on WhatsApp',
+                  title: 'اتصل بنا',
+                  subtitle: 'تواصل معنا عبر واتساب',
                   detail: '+964 783 782 255 7',
                   color: const Color(0xFF4CAF50),
                   type: 'whatsapp',

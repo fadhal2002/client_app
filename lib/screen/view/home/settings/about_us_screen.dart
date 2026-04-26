@@ -23,7 +23,7 @@ class AboutUsScreen extends StatelessWidget {
           },
         ),
         title: const Text(
-          'About Us',
+          'من نحن',
           style: TextStyle(
             color: Color(0xFF1A1E2C),
             fontWeight: FontWeight.w600,
@@ -52,14 +52,13 @@ class AboutUsScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Connect With Us Card
             ConnectWithUsCard(),
+
             const SizedBox(height: 24),
 
-            // Footer
             Center(
               child: Text(
-                '© 2024 Nakla. All rights reserved.',
+                '© 2024 Nakla. جميع الحقوق محفوظة',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey[500],

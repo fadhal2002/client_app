@@ -1,6 +1,7 @@
 import 'package:client_app/core/functions/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 abstract class LoginModel extends ChangeNotifier {
   login(BuildContext context);
@@ -14,17 +15,16 @@ abstract class LoginModel extends ChangeNotifier {
   String VerificationCode = '123456';
   String UserEnteredCode = '';
 
-  TextEditingController phoneNumber = TextEditingController();
+  late TextEditingController phoneNumber;
   late TextEditingController firstName;
   late TextEditingController lastName;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  AppServices appServices = AppServices();
 }
 
 class LoginModelImp extends LoginModel {
-  void onInit() {
+  LoginModelImp(BuildContext context) {
+    final appServices = Provider.of<AppServices>(context, listen: false);
     phoneNumber = TextEditingController(
       text: appServices.shared.getString('phoneNumber') ?? '',
     );
@@ -36,17 +36,18 @@ class LoginModelImp extends LoginModel {
     );
   }
 
+  AppServices getAppServices(BuildContext context) {
+    return Provider.of<AppServices>(context, listen: false);
+  }
+
   @override
   void login(BuildContext context) {
     if (formKey.currentState!.validate()) {
+      final appServices = getAppServices(context);
       appServices.shared.setString("phoneNumber", phoneNumber.text.trim());
-      Navigator.pushNamed(context, '/optVerification');
+      Navigator.pushNamed(context, '/OtpVerification');
     } else {
-      customSnackbar(
-        context,
-        'Please enter a valid phone number',
-        'The phone number you entered is not valid.',
-      );
+      customSnackbar('خطأ', 'الرقم الذي أدخلته غير صحيح.');
     }
     notifyListeners();
   }
@@ -60,12 +61,28 @@ class LoginModelImp extends LoginModel {
 
   @override
   void resendCode() {
-    // Implement resend code logic here
-    notifyListeners();
+    startCountdown();
+    customSnackbar('نجاح', 'تم إرسال رمز OTP جديد إلى رقم هاتفك.');
   }
 
   @override
   void startCountdown() {
-    // TODO: implement startCountdown
+    if (countdown > 0) return;
+
+    isResendEnabled = false;
+    countdown = 5;
+
+    Future.doWhile(() async {
+      notifyListeners();
+      await Future.delayed(const Duration(seconds: 1));
+      if (countdown > 0) {
+        countdown--;
+        return true;
+      } else {
+        isResendEnabled = true;
+        notifyListeners();
+        return false;
+      }
+    });
   }
 }

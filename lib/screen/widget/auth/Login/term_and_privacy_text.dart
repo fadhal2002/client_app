@@ -6,7 +6,7 @@ class TermAndPrivacyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'By continuing, you agree to our Terms of Service\nand Privacy Policy',
+      'بالتسجيل، فإنك توافق على الشروط والأحكام وسياسة الخصوصية الخاصة بنا.',
       textAlign: TextAlign.center,
       style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.7)),
     );

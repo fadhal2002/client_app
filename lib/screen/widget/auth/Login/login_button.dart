@@ -31,7 +31,7 @@ class LoginButton extends StatelessWidget {
           ),
         ),
         child: const Text(
-          'Continue',
+          'تسجيل الدخول',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

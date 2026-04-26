@@ -1,14 +1,13 @@
 import 'package:client_app/screen/view/home/HomePage/AddDelivery/route_map_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart'; // مكتبة الخرائط المفتوحة
-import 'package:get/get.dart';
-import 'package:latlong2/latlong.dart'; // للتعامل مع الإحداثيات
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class LocationPickerScreen extends StatefulWidget {
   const LocationPickerScreen({super.key});
-  
+
   @override
   State<LocationPickerScreen> createState() => _LocationPickerScreenState();
 }
@@ -17,19 +16,14 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   final MapController _mapController = MapController();
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> _suggestions = [];
-  LatLng _selectedPoint = const LatLng(32.0259, 44.3615); // مركز النجف
+  LatLng _selectedPoint = const LatLng(32.0259, 44.3615);
 
-  // 1. دالة البحث باستخدام Nominatim (مجانية بالكامل)
-  // 1. دالة البحث باستخدام سيرفر النجف المحلي (Nominatim Local)
   Future<void> _getOSMSuggestions(String query) async {
     if (query.length < 2) {
-      // تقليل عدد الأحرف للبحث المحلي السريع
       setState(() => _suggestions = []);
       return;
     }
 
-    // ملاحظة هندسية: استخدم localhost إذا كنت تشغل الإيموليتر،
-    // أو استخدم IP حاسوبك (مثل 192.168.1.5) إذا كنت تجرب من موبايل حقيقي.
     final String url =
         "http://localhost:8080/search.php"
         "?q=$query"
@@ -48,11 +42,9 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
       }
     } catch (e) {
       print("❌ خطأ البحث المحلي: $e");
-      // نصيحة: إذا كنت تستخدم Android Emulator، جرب استبدال localhost بـ 10.0.2.2
     }
   }
 
-  // 2. دالة التعامل مع اختيار موقع من القائمة
   void _selectLocation(dynamic item) {
     final double lat = double.parse(item['lat']);
     final double lon = double.parse(item['lon']);
@@ -71,7 +63,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // 3. عرض الخريطة (بدون Token)
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -83,11 +74,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             ),
             children: [
               TileLayer(
-                // هذا الرابط مخصص لإبراز الشوارع وخطوط النقل بشكل هندسي واضح
-                // urlTemplate: 'https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=YOUR_API_KEY',
-                // // ملاحظة: Thunderforest يتطلب API Key مجاني بسيط
-                // // إذا كنت تريد بديل مجاني تماماً وبدون حساب، استخدم الرابط أدناه:
-                // urlTemplate: 'https://api.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=aebbd3c90ecb423494467f5a30f64bb2',
                 urlTemplate:
                     'https://api.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=aebbd3c90ecb423494467f5a30f64bb2',
                 subdomains: const ['a', 'b', 'c', 'd'],
@@ -110,7 +96,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             ],
           ),
 
-          // 4. واجهة البحث والاقتراحات
           Positioned(
             top: 50,
             left: 15,
@@ -125,7 +110,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: "ابحث في النجف عبر OSM...",
+                      hintText: "ابحث عن موقع...",
                       prefixIcon: const Icon(Icons.search, color: Colors.green),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
@@ -178,7 +163,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             ),
           ),
 
-          // زر تأكيد الموقع لـ PONDo AI
           Positioned(
             bottom: 30,
             left: 20,
@@ -193,10 +177,17 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               ),
               onPressed: () {
                 print(
-                  "✅ تم اختيار موقع لـ PONDo AI: ${_selectedPoint.latitude}, ${_selectedPoint.longitude}",
+                  "تم اختيار الموقع: ${_selectedPoint.latitude}, ${_selectedPoint.longitude}",
                 );
 
-                Get.to(() => RouteMapScreen(selectedPoint: _selectedPoint));
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        RouteMapScreen(selectedPoint: _selectedPoint),
+                  ),
+                  (route) => false,
+                );
               },
               child: const Text(
                 "تأكيد العنوان",

@@ -33,7 +33,7 @@ class ContinueButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Center(
               child: Text(
-                'Continue',
+                'استمر',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

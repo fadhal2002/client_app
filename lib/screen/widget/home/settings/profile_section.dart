@@ -1,16 +1,16 @@
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class ProfileSection extends StatelessWidget {
   const ProfileSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    AppServices appServices = Get.find<AppServices>();
+    AppServices appServices = Provider.of<AppServices>(context, listen: false);
     return InkWell(
       onTap: () {
-        Get.toNamed('/EditProfileScreen');
+        Navigator.pushNamed(context, '/EditProfileScreen');
       },
 
       child: Container(
@@ -41,7 +41,7 @@ class ProfileSection extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  ''
+                  '${appServices.shared.getString("firstName")!.substring(0, 1)}${appServices.shared.getString("lastName")!.substring(0, 1)}'
                       .toUpperCase(),
                   style: const TextStyle(
                     fontSize: 20,

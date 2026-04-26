@@ -1,7 +1,6 @@
-import 'package:client_app/controller/auth/login_controller.dart';
-import 'package:client_app/core/servers/app_servers.dart';
+import 'package:client_app/models/auth/login_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class NameField extends StatelessWidget {
   IconData icon;
@@ -10,8 +9,18 @@ class NameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppServices appServices = Get.find<AppServices>();
+    return NameFieldView(name: name, icon: icon);
+  }
+}
 
+class NameFieldView extends StatelessWidget {
+  IconData icon;
+  String name = '';
+  NameFieldView({super.key, required this.name, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.read<LoginModelImp>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -51,9 +60,7 @@ class NameField extends StatelessWidget {
             ],
           ),
           child: TextField(
-            controller: name == 'First Name'
-                ? Get.find<LogincontrollerImp>().firstName
-                : Get.find<LogincontrollerImp>().lastName,
+            controller: name == 'الاسم الأول' ? model.firstName : model.lastName,
             decoration: InputDecoration(
               hintText: 'Enter your ${name.toLowerCase()}',
               hintStyle: TextStyle(fontSize: 14, color: Colors.grey[400]),

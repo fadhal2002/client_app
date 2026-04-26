@@ -12,8 +12,10 @@ class HomeScreenState extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreenState> {
   int _selectedIndex = 0;
 
-  // Placeholder screens
-  final List<Widget> _screens = [const HomeScreen(), const SettingsScreen()];
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const SettingsScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +59,12 @@ class _HomeScreenState extends State<HomeScreenState> {
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               activeIcon: Icon(Icons.home),
-              label: 'Home',
+              label: 'الرئيسية',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_outlined),
               activeIcon: Icon(Icons.settings),
-              label: 'Settings',
+              label: 'الإعدادات',
             ),
           ],
         ),

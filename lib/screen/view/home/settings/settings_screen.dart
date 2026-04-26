@@ -1,8 +1,6 @@
-import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/widget/home/settings/profile_section.dart';
 import 'package:client_app/screen/widget/home/settings/settings_section.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -15,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          'Settings',
+          'الإعدادات',
           style: TextStyle(
             color: Color(0xFF1A1E2C),
             fontWeight: FontWeight.w600,
@@ -32,38 +30,23 @@ class SettingsScreen extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // Settings Sections
-          SettingsSection(
-            title: 'Preferences',
-            items: [
-              SettingsItem(
-                icon: Icons.language_outlined,
-                title: 'Language',
-                subtitle: 'English',
-                onTap: () {
-                  Get.toNamed('/LanguageScreen');
-                },
-              ),
-            ],
-          ),
-
           const SizedBox(height: 16),
 
           SettingsSection(
-            title: 'Support',
+            title: 'الدعم',
             items: [
               SettingsItem(
                 icon: Icons.help_outline,
-                title: 'Help Center',
+                title: 'مركز المساعدة',
                 onTap: () {
-                  Get.toNamed('/HelpCenterScreen');
+                  Navigator.pushNamed(context, '/HelpCenterScreen');
                 },
               ),
               SettingsItem(
                 icon: Icons.info_outline,
-                title: "About Us",
+                title: "من نحن",
                 onTap: () {
-                  Get.toNamed('/AboutUsScreen');
+                  Navigator.pushNamed(context, '/AboutUsScreen');
                 },
               ),
             ],
@@ -74,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
           // Version Info
           Center(
             child: Text(
-              'Version 1.0.0',
+              'الإصدار 1.0.0',
               style: TextStyle(fontSize: 12, color: Colors.grey[500]),
             ),
           ),

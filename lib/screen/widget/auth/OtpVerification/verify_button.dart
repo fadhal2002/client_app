@@ -1,21 +1,21 @@
-import 'package:client_app/controller/auth/login_controller.dart';
 import 'package:client_app/core/functions/custom_snackbar.dart';
+import 'package:client_app/models/auth/login_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class VerifyButton extends StatelessWidget {
   const VerifyButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    LogincontrollerImp controller = Get.find<LogincontrollerImp>();
+    final model = context.read<LoginModelImp>();
     return ElevatedButton(
       onPressed: () {
-        if (controller.UserEnteredCode == controller.VerificationCode) {
-          customSnackbar(context, 'Success', 'OTP Verified Successfully');
-          Get.toNamed('/NameInput');
+        if (model.UserEnteredCode == model.VerificationCode) {
+          customSnackbar('نجاح', 'تم التحقق بنجاح!');
+          Navigator.pushNamed(context, '/NameInput');
         } else {
-          customSnackbar(context, 'Error', 'Invalid OTP. Please try again.');
+          customSnackbar('خطأ', 'رمز OTP غير صحيح. يرجى المحاولة مرة أخرى.');
         }
       },
       style: ElevatedButton.styleFrom(

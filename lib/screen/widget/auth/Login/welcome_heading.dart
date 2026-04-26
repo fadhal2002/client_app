@@ -6,7 +6,7 @@ class WelcomeHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Welcome!',
+      'مرحبًا بك في تطبيقنا',
       style: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,

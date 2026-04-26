@@ -9,7 +9,6 @@ class PhoneNumberInput extends StatelessWidget {
   final IconData? suffixIcon;
   final bool? isObscure;
   final void Function()? onSuffixIconTap;
-  // final void Function(bool isValid) onInputValidated;
 
   const PhoneNumberInput({
     super.key,
@@ -20,22 +19,21 @@ class PhoneNumberInput extends StatelessWidget {
     this.suffixIcon,
     this.isObscure,
     this.onSuffixIconTap,
-    // required this.onInputValidated,
   });
 
   @override
   Widget build(BuildContext context) {
     return InternationalPhoneNumberInput(
       searchBoxDecoration: InputDecoration(
-        hintText: 'search_country'.tr,
+        hintText: 'بحث الدولة'.tr,
         hintStyle: TextStyle(
           color: Colors.grey[500],
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
-        prefixIcon: Icon(
+        prefixIcon: const Icon(
           Icons.search,
-          color: const Color(0xFF7B2FF7),
+          color: Color(0xFF7B2FF7),
           size: 20,
         ),
         filled: true,
@@ -48,9 +46,9 @@ class PhoneNumberInput extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(color: Colors.grey[200]!, width: 1),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFF7B2FF7), width: 2),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          borderSide: BorderSide(color: Color(0xFF7B2FF7), width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 14,
@@ -97,9 +95,9 @@ class PhoneNumberInput extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(color: Colors.grey[200]!, width: 1),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFF7B2FF7), width: 2),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          borderSide: BorderSide(color: Color(0xFF7B2FF7), width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

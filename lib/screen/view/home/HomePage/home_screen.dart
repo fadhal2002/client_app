@@ -1,3 +1,4 @@
+import 'package:client_app/screen/view/home/HomePage/AddDelivery/Location_Picker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Hello,',
+                    'مرحباً،',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const Text(
@@ -89,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         const Text(
-                          'Ready for delivery',
+                          'جاهز للتوصيل',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -123,7 +124,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: const TextField(
                   decoration: InputDecoration(
-                    hintText: 'Search for packages or locations...',
+                    hintText: 'ابحث عن الطرود أو المواقع...',
                     hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     prefixIcon: Icon(
                       Icons.search,
@@ -149,7 +150,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Quick Actions',
+                    'إجراءات سريعة',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -161,7 +162,7 @@ class HomeScreen extends StatelessWidget {
                     style: TextButton.styleFrom(
                       foregroundColor: const Color(0xFF4158D0),
                     ),
-                    child: const Text('View All'),
+                    child: const Text('عرض الكل'),
                   ),
                 ],
               ),
@@ -176,25 +177,29 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   _buildQuickAction(
                     icon: Icons.add_location_alt_outlined,
-                    title: 'New Delivery',
+                    title: 'طلب توصيل جديد',
                     color: const Color(0xFF4158D0),
                     onTap: () {
-                      Get.toNamed('/LocationPickerScreen');
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LocationPickerScreen(),
+                        ),
+                        (route) => false,
+                      );
                     },
                   ),
                   const SizedBox(width: 12),
                   _buildQuickAction(
                     icon: Icons.history,
-                    title: 'History',
+                    title: 'السجل',
                     color: const Color(0xFFFF9800),
-                    onTap: () {
-                      
-                    },
+                    onTap: () {},
                   ),
                   const SizedBox(width: 12),
                   _buildQuickAction(
                     icon: Icons.support_agent,
-                    title: 'Support',
+                    title: 'الدعم',
                     color: const Color(0xFF4CAF50),
                     onTap: () {},
                   ),
@@ -211,7 +216,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Active Deliveries',
+                    'الطلبات النشطة',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -219,7 +224,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '2 active',
+                    '2 نشطة',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[500],
@@ -241,30 +246,30 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   _buildDeliveryCard(
                     orderId: '#NK-2847',
-                    pickup: 'Downtown Cafe',
-                    dropoff: 'West End Avenue',
-                    status: 'Pickup',
-                    time: '10 min ago',
+                    pickup: 'الموقع الأول',
+                    dropoff: 'الموقع الثاني',
+                    status: 'استلام',
+                    time: 'منذ 10 دقائق',
                     color: const Color(0xFF4158D0),
                     onTap: () {},
                   ),
                   const SizedBox(width: 16),
                   _buildDeliveryCard(
                     orderId: '#NK-2848',
-                    pickup: 'Fresh Mart Grocery',
-                    dropoff: 'Northside Tower',
-                    status: 'En Route',
-                    time: '25 min ago',
+                    pickup: 'الموقع الأول',
+                    dropoff: 'الموقع الثاني',
+                    status: 'في الطريق',
+                    time: 'منذ 25 دقيقة',
                     color: const Color(0xFFFF9800),
                     onTap: () {},
                   ),
                   const SizedBox(width: 16),
                   _buildDeliveryCard(
                     orderId: '#NK-2849',
-                    pickup: 'Pizza Palace',
-                    dropoff: 'Central Park',
-                    status: 'Delivered',
-                    time: '1 hour ago',
+                    pickup: 'الموقع الأول',
+                    dropoff: 'الموقع الثاني',
+                    status: 'تم التسليم',
+                    time: 'منذ ساعة',
                     color: const Color(0xFF4CAF50),
                     onTap: () {},
                   ),
@@ -281,7 +286,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Recent Activity',
+                    'النشاط الأخير',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -293,7 +298,7 @@ class HomeScreen extends StatelessWidget {
                     style: TextButton.styleFrom(
                       foregroundColor: const Color(0xFF4158D0),
                     ),
-                    child: const Text('View All'),
+                    child: const Text('عرض الكل'),
                   ),
                 ],
               ),
@@ -308,25 +313,25 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   _buildActivityItem(
                     icon: Icons.check_circle,
-                    title: 'Delivery Completed',
-                    subtitle: 'Package #NK-2842 delivered successfully',
-                    time: '2 hours ago',
+                    title: 'تم تسليم الطلب',
+                    subtitle: 'تم تسليم الحزمة بنجاح',
+                    time: 'منذ ساعتين',
                     color: const Color(0xFF4CAF50),
                   ),
                   const SizedBox(height: 12),
                   _buildActivityItem(
                     icon: Icons.pending,
-                    title: 'Order Confirmed',
-                    subtitle: 'Package #NK-2847 confirmed by driver',
-                    time: '3 hours ago',
+                    title: 'تم تأكيد الطلب',
+                    subtitle: 'تم تأكيد الطلب من قبل السائق',
+                    time: 'منذ 3 ساعات',
                     color: const Color(0xFFFF9800),
                   ),
                   const SizedBox(height: 12),
                   _buildActivityItem(
                     icon: Icons.attach_money,
-                    title: 'Payment Received',
-                    subtitle: 'Payment of \$12.50 received',
-                    time: '5 hours ago',
+                    title: 'تم استلام الدفع',
+                    subtitle: 'تم استلام الدفع بنجاح',
+                    time: 'منذ 5 ساعات',
                     color: const Color(0xFF4158D0),
                   ),
                 ],
@@ -354,7 +359,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Free Delivery',
+                          'توصيل مجاني',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -363,7 +368,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'On your first 3 deliveries',
+                          'على أول 3 طلبات',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.9),
@@ -380,7 +385,7 @@ class HomeScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: const Text(
-                            'Use Code: NAKLA1ST',
+                            'الكود: NAKLA1ST',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -439,7 +444,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF1A1E2C),
@@ -566,7 +571,7 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
               ),
               child: Text(
-                status == 'Pickup' ? 'Navigate' : 'Track',
+                status == 'استلام' ? 'ملاحة' : 'تتبع',
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

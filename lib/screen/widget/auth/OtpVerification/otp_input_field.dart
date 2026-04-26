@@ -1,7 +1,6 @@
-import 'package:client_app/controller/auth/login_controller.dart';
+import 'package:client_app/models/auth/login_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
 
 class OtpInputField extends StatelessWidget {
   const OtpInputField({super.key});
@@ -20,7 +19,7 @@ class OtpInputField extends StatelessWidget {
   }
 
   Widget _buildOtpDigitField(BuildContext context, int index) {
-    Logincontroller controller = Get.find<LogincontrollerImp>();
+    final model = context.read<LoginModelImp>();
     return SizedBox(
       width: 41,
       child: TextFormField(
@@ -53,11 +52,11 @@ class OtpInputField extends StatelessWidget {
         onChanged: (value) {
           if (value.length == 1 && index < 6) {
             FocusScope.of(context).nextFocus();
-            controller.UserEnteredCode += value;
+            model.UserEnteredCode += value;
           } else if (value.isEmpty && index > 0) {
-            controller.UserEnteredCode = controller.UserEnteredCode.substring(
+            model.UserEnteredCode = model.UserEnteredCode.substring(
               0,
-              controller.UserEnteredCode.length - 1,
+              model.UserEnteredCode.length - 1,
             );
             FocusScope.of(context).previousFocus();
           }

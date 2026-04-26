@@ -6,7 +6,7 @@ class Timer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Code expires in 05:00',
+      'الرمز صالح لمدة 5 دقائق',
       style: TextStyle(fontSize: 12, color: Colors.grey[500]),
       textAlign: TextAlign.center,
     );

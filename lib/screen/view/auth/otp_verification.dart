@@ -1,11 +1,11 @@
-import 'package:client_app/controller/auth/login_controller.dart';
-import 'package:client_app/core/servers/app_servers.dart';
+import 'package:client_app/models/auth/login_model.dart';
 import 'package:client_app/screen/widget/auth/OtpVerification/otp_input_field.dart';
 import 'package:client_app/screen/widget/auth/OtpVerification/resend_code_section.dart';
 import 'package:client_app/screen/widget/auth/OtpVerification/verification_prompt.dart';
 import 'package:client_app/screen/widget/auth/OtpVerification/verify_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class OtpVerification extends StatelessWidget {
   final String? phoneNumber;
@@ -14,11 +14,23 @@ class OtpVerification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppServices appServices = Get.find<AppServices>();
+    return ChangeNotifierProvider(
+      create: (context) => LoginModelImp(context),
+      child: const OtpVerificationView(),
+    );
+  }
+}
+
+class OtpVerificationView extends StatelessWidget {
+  const OtpVerificationView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.read<LoginModelImp>();
+
     return Scaffold(
-      backgroundColor: Color(0xFFE0AAFF),
+      backgroundColor: const Color(0xFFE0AAFF),
       body: Container(
-        // margin: const EdgeInsets.all(0),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -33,7 +45,6 @@ class OtpVerification extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Back Button
                 Align(
                   alignment: Alignment.topLeft,
                   child: IconButton(
@@ -45,12 +56,10 @@ class OtpVerification extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Logo / Icon Section
                 VerificationPrompt(
-                  phoneNumber: appServices.shared.getString("phoneNumber"),
+                  phoneNumber: model.phoneNumber.text.trim(),
                 ),
 
-                // OTP Input Container
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -70,9 +79,8 @@ class OtpVerification extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // OTP Input Fields
                       const Text(
-                        'Enter Verification Code',
+                        'أدخل رمز التحقق',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -80,6 +88,7 @@ class OtpVerification extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                       ),
+
                       const SizedBox(height: 24),
 
                       OtpInputField(),
@@ -90,8 +99,11 @@ class OtpVerification extends StatelessWidget {
 
                       const SizedBox(height: 24),
 
-                      // Resend Code Section
-                      ResendCodeSection(),
+                      Consumer<LoginModelImp>(
+                        builder: (context, model, child) {
+                          return ResendCodeSection();
+                        },
+                      ),
                     ],
                   ),
                 ),

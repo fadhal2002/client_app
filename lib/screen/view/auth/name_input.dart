@@ -1,19 +1,30 @@
-import 'package:client_app/controller/auth/login_controller.dart';
 import 'package:client_app/core/functions/custom_snackbar.dart';
-import 'package:client_app/core/servers/app_servers.dart';
+import 'package:client_app/models/auth/login_model.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
 import 'package:client_app/screen/widget/auth/UserName/name_field.dart';
 import 'package:client_app/screen/widget/header_ilustration.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class NameInput extends StatelessWidget {
   const NameInput({super.key});
 
   @override
   Widget build(BuildContext context) {
-    AppServices appServices = Get.find<AppServices>();
-    LogincontrollerImp controller = Get.find<LogincontrollerImp>();
+    return ChangeNotifierProvider(
+      create: (context) => LoginModelImp(context),
+      child: const NameInputView(),
+    );
+  }
+}
+
+class NameInputView extends StatelessWidget {
+  const NameInputView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.read<LoginModelImp>();
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FC),
       appBar: AppBar(
@@ -22,11 +33,11 @@ class NameInput extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF1A1E2C)),
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
           },
         ),
         title: const Text(
-          'Personal Info',
+          'المعلومات الشخصية',
           style: TextStyle(
             color: Color(0xFF1A1E2C),
             fontWeight: FontWeight.w600,
@@ -42,53 +53,60 @@ class NameInput extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HeaderIlustration(
-                title: 'Personal Info',
-                subtitle: 'Please provide your personal information',
+                title: 'المعلومات الشخصية',
+                subtitle: 'يرجى إدخال معلوماتك الشخصية',
                 icon: Icons.person,
               ),
 
               const SizedBox(height: 32),
 
               NameField(
-                name: 'First Name',
+                name: 'الاسم الأول',
                 icon: Icons.account_circle_outlined,
               ),
 
               const SizedBox(height: 20),
 
-              NameField(name: 'Last Name', icon: Icons.badge),
+              NameField(name: 'الاسم الأخير', icon: Icons.badge),
 
               const SizedBox(height: 32),
 
               ContinueButton(
                 onTap: () {
-                  if (controller.firstName.text.isEmpty ||
-                      controller.lastName.text.isEmpty) {
+                  print('First Name: ${model.firstName.text}');
+                  print('Last Name: ${model.lastName.text}');
+
+                  if (model.firstName.text.isEmpty ||
+                      model.lastName.text.isEmpty) {
                     customSnackbar(
-                      context,
-                      'Error',
-                      'Please enter both first and last names.',
+                      'خطأ',
+                      'يرجى إدخال الاسم الأول واسم العائلة',
                     );
                   } else {
-                    customSnackbar(
+                    customSnackbar('نجاح', 'تم حفظ الأسماء بنجاح');
+
+                    model
+                        .getAppServices(context)
+                        .shared
+                        .setString('firstName', model.firstName.text.trim());
+
+                    model
+                        .getAppServices(context)
+                        .shared
+                        .setString('lastName', model.lastName.text.trim());
+
+                    model
+                        .getAppServices(context)
+                        .shared
+                        .setString('screen', 'homePage');
+
+                    model.getAppServices(context).login();
+
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
-                      'Success',
-                      'Names saved successfully!',
+                      '/HomePageState',
+                      (route) => false,
                     );
-                    appServices.shared.setString(
-                      'firstName',
-                      controller.firstName.text.trim(),
-                    );
-                    appServices.shared.setString(
-                      'lastName',
-                      controller.lastName.text.trim(),
-                    );
-                    appServices.shared.setString(
-                      'phoneNumber',
-                      controller.phoneNumber.text.trim(),
-                    );
-                    appServices.shared.setString('screen', 'homePage');
-                    Get.toNamed('/HomePageState');
                   }
                 },
               ),

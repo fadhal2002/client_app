@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart'; // مكتبة الخرائط المفتوحة
-import 'package:latlong2/latlong.dart'; // للتعامل مع الإحداثيات
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -17,15 +16,14 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
   final MapController _mapController = MapController();
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> _suggestions = [];
-  LatLng get _selectedPoint =>
-      widget.selectedPoint ?? const LatLng(32.0259, 44.3615); // مركز النجف
 
-  // متغيرات الملاحة المضافة
+  LatLng get _selectedPoint =>
+      widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
+
   List<LatLng> _routePoints = [];
   String _distance = "";
   String _duration = "";
 
-  // 1. دالة البحث باستخدام سيرفر النجف المحلي (Nominatim Local)
   Future<void> _getOSMSuggestions(String query) async {
     if (query.length < 2) {
       setState(() => _suggestions = []);
@@ -52,11 +50,14 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
     }
   }
 
-  // دالة مضافة لحساب المسار والوقت عبر OSRM
   Future<void> _getRoute(LatLng destination) async {
-    final start = _selectedPoint; // نقطة الانطلاق (المركز)
+    final start = _selectedPoint;
+
     final url = Uri.parse(
-      'https://router.project-osrm.org/route/v1/driving/${start.longitude},${start.latitude};${destination.longitude},${destination.latitude}?overview=full&geometries=polyline',
+      'https://router.project-osrm.org/route/v1/driving/'
+      '${start.longitude},${start.latitude};'
+      '${destination.longitude},${destination.latitude}'
+      '?overview=full&geometries=polyline',
     );
 
     try {
@@ -64,6 +65,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final route = data['routes'][0];
+
         setState(() {
           _routePoints = _decodePolyline(route['geometry']);
           _distance = "${(route['distance'] / 1000).toStringAsFixed(1)} كم";
@@ -75,37 +77,44 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
     }
   }
 
-  // دالة فك تشفير الخطوط الجغرافية
   List<LatLng> _decodePolyline(String encoded) {
     List<LatLng> points = [];
     int index = 0, len = encoded.length;
     int lat = 0, lng = 0;
+
     while (index < len) {
       int b, shift = 0, result = 0;
+
       do {
         b = encoded.codeUnitAt(index++) - 63;
         result |= (b & 0x1f) << shift;
         shift += 5;
       } while (b >= 0x20);
+
       lat += ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+
       shift = 0;
       result = 0;
+
       do {
         b = encoded.codeUnitAt(index++) - 63;
         result |= (b & 0x1f) << shift;
         shift += 5;
       } while (b >= 0x20);
+
       lng += ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+
       points.add(LatLng(lat / 1E5, lng / 1E5));
     }
+
     return points;
   }
 
-  // 2. دالة التعامل مع اختيار موقع من القائمة
   void _selectLocation(dynamic item) {
     final double lat = double.parse(item['lat']);
     final double lon = double.parse(item['lon']);
     final destination = LatLng(lat, lon);
+
     LatLng _selectedPoint =
         widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
 
@@ -116,7 +125,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
     });
 
     _mapController.move(_selectedPoint, 15.0);
-    _getRoute(destination); // استدعاء حساب المسافة فور الاختيار
+    _getRoute(destination);
   }
 
   @override
@@ -124,7 +133,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // 3. عرض الخريطة
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -134,7 +142,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                 LatLng _selectedPoint =
                     widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
                 setState(() => _selectedPoint = point);
-                _getRoute(point); // حساب المسافة عند الضغط اليدوي
+                _getRoute(point);
               },
             ),
             children: [
@@ -144,10 +152,8 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                 subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.pondo.ai',
               ),
-              // إضافة طبقة المسار (الخط الأزرق)
-              // داخل مصفوفة الـ children في FlutterMap
+
               PolylineLayer(
-                // تحديد النوع هنا <Polyline<Object>> يحل المشكلة
                 polylines: _routePoints.isEmpty
                     ? <Polyline<Object>>[]
                     : <Polyline<Object>>[
@@ -158,6 +164,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                         ),
                       ],
               ),
+
               MarkerLayer(
                 markers: [
                   Marker(
@@ -170,7 +177,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                       size: 15,
                     ),
                   ),
-                  // علامة مركز البداية (النجف)
                   const Marker(
                     point: LatLng(32.0259, 44.3615),
                     child: Icon(
@@ -184,7 +190,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
             ],
           ),
 
-          // 4. واجهة البحث والاقتراحات
           Positioned(
             top: 50,
             left: 15,
@@ -200,7 +205,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                     controller: _searchController,
                     onChanged: _getOSMSuggestions,
                     decoration: InputDecoration(
-                      hintText: "ابحث في النجف عبر OSM...",
+                      hintText: "ابحث عن موقع...",
                       prefixIcon: const Icon(Icons.search, color: Colors.green),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
@@ -221,6 +226,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                     ),
                   ),
                 ),
+
                 if (_suggestions.isNotEmpty)
                   Container(
                     margin: const EdgeInsets.only(top: 5),
@@ -256,34 +262,25 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
             ),
           ),
 
-          // لوحة معلومات المسافة والوقت المضافة
           if (_distance.isNotEmpty)
             Positioned(
               bottom: 110,
               left: 20,
               right: 20,
               child: Card(
-                color: Colors.white.withOpacity(0.9),
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(
-                        "🛣 المسافة: $_distance",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "🕒 الوقت: $_duration",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      Text("المسافة: $_distance"),
+                      Text("الوقت: $_duration"),
                     ],
                   ),
                 ),
               ),
             ),
 
-          // زر تأكيد الموقع لـ PONDo AI
           Positioned(
             bottom: 30,
             left: 20,
@@ -298,7 +295,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
               ),
               onPressed: () {
                 print(
-                  "✅ الموقع: ${_selectedPoint.latitude}, ${_selectedPoint.longitude} | المسافة: $_distance",
+                  "الموقع: ${_selectedPoint.latitude}, ${_selectedPoint.longitude} | المسافة: $_distance",
                 );
               },
               child: const Text(
