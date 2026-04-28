@@ -72,18 +72,32 @@ class MapModel extends ChangeNotifier {
   }
 
   // ---------- Select a suggestion (sets either start or destination) ----------
-  void selectAsStartPoint(dynamic item) {
-    final lat = double.parse(item['lat']);
-    final lon = double.parse(item['lon']);
-    setStartPoint(LatLng(lat, lon));
-    clearSuggestions();
+void selectAsStartPoint(dynamic item) {
+    // 1. استخراج القيم مع التحقق
+    final lat = double.tryParse(item['lat']?.toString() ?? '');
+    final lon = double.tryParse(item['lon']?.toString() ?? '');
+
+    // 2. التحقق من صحة القيم قبل التعيين
+    if (lat != null && lon != null) {
+      setStartPoint(LatLng(lat, lon));
+      clearSuggestions();
+    } else {
+      debugPrint("❌ خطأ: البيانات القادمة غير صالحة: $item");
+    }
   }
 
   void selectAsDestination(dynamic item) {
-    final lat = double.parse(item['lat']);
-    final lon = double.parse(item['lon']);
-    setDestinationPoint(LatLng(lat, lon));
-    clearSuggestions();
+    // 1. استخراج القيم مع التحقق
+    final lat = double.tryParse(item['lat']?.toString() ?? '');
+    final lon = double.tryParse(item['lon']?.toString() ?? '');
+
+    // 2. التحقق من صحة القيم
+    if (lat != null && lon != null) {
+      setDestinationPoint(LatLng(lat, lon));
+      clearSuggestions();
+    } else {
+      debugPrint("❌ خطأ: البيانات القادمة غير صالحة: $item");
+    }
   }
 
   // ---------- Route logic (OSRM) ----------

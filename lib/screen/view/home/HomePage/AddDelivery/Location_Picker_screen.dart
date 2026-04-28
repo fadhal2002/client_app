@@ -45,18 +45,27 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     }
   }
 
-  void _selectLocation(dynamic item) {
-    final double lat = double.parse(item['lat']);
-    final double lon = double.parse(item['lon']);
+void _selectLocation(dynamic item) {
+  // 1. تحويل القيمة إلى String ثم محاولة تحليلها
+  // نستخدم ?? '' لتجنب الـ null
+  final lat = double.tryParse(item['lat']?.toString() ?? '');
+  final lon = double.tryParse(item['lon']?.toString() ?? '');
 
+  // 2. التحقق من أن القيم تم تحليلها بنجاح وليست null
+  if (lat != null && lon != null) {
     setState(() {
       _selectedPoint = LatLng(lat, lon);
       _suggestions = [];
-      _searchController.text = item['display_name'];
+      // إضافة تحوط بسيط لاسم المكان
+      _searchController.text = item['display_name']?.toString() ?? 'Unknown Location';
     });
 
     _mapController.move(_selectedPoint, 15.0);
+  } else {
+    // 3. معالجة حالة الخطأ (مثلاً طباعة رسالة أو تنبيه المستخدم)
+    debugPrint("❌ تعذر اختيار الموقع: بيانات الإحداثيات غير صالحة: $item");
   }
+}
 
   @override
   Widget build(BuildContext context) {
