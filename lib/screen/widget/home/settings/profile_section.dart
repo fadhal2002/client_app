@@ -40,15 +40,7 @@ class ProfileSection extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(
-                  '${appServices.shared.getString("firstName")!.substring(0, 1)}${appServices.shared.getString("lastName")!.substring(0, 1)}'
-                      .toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
+                child: Icon(Icons.person, size: 28, color: Colors.white),
               ),
             ),
             const SizedBox(width: 16),
@@ -67,6 +59,7 @@ class ProfileSection extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     appServices.shared.getString("phoneNumber")!,
+                    textDirection: TextDirection.ltr,
                     style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                   ),
                 ],

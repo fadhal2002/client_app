@@ -60,9 +60,11 @@ class NameFieldView extends StatelessWidget {
             ],
           ),
           child: TextField(
-            controller: name == 'الاسم الأول' ? model.firstName : model.lastName,
+            controller: name == 'الاسم الأول'
+                ? model.firstName
+                : model.lastName,
             decoration: InputDecoration(
-              hintText: 'Enter your ${name.toLowerCase()}',
+              hintText: 'ادخل ${name.toLowerCase()}',
               hintStyle: TextStyle(fontSize: 14, color: Colors.grey[400]),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),

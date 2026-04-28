@@ -24,14 +24,10 @@ class DescriptionCard extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                size: 20,
-                color: Color(0xFF4158D0),
-              ),
+              Icon(Icons.info_outline, size: 20, color: Color(0xFF4158D0)),
               SizedBox(width: 8),
               Text(
-                'About Nakla',
+                'من نحن',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -42,7 +38,7 @@ class DescriptionCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Nakla is your trusted delivery partner, bringing convenience to your doorstep. We connect you with reliable drivers to deliver your packages quickly and safely.',
+            'نقلة هو شريكك الموثوق في خدمات التوصيل، حيث نوفّر لك الراحة حتى باب منزلك. نربطك بسائقين موثوقين لتوصيل طلباتك بسرعة وأمان.',
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
@@ -51,7 +47,7 @@ class DescriptionCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Whether it\'s food, groceries, documents, or any other item, Nakla ensures your deliveries are handled with care and professionalism.',
+            'سواء كان الأمر طعامًا أو سلعًا أو مستندات أو أي شيء آخر، فإن نقلة يضمن أن توصيلاتك تتم بعناية واحترافية.',
             style: TextStyle(
               fontSize: 14,
               height: 1.5,

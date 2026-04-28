@@ -19,7 +19,7 @@ class AboutUsScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF1A1E2C)),
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
           },
         ),
         title: const Text(

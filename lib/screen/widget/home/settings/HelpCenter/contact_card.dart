@@ -24,9 +24,10 @@ class ContactCard extends StatelessWidget {
     final emailUri = Uri(
       scheme: 'mailto',
       path: detail, // The email address
-      query: 'subject=Support Request&body=Hello, I need help with...',
+      query:
+          'subject=Support Request&body=مرحبًا، أحتاج إلى مساعدة بخصوص...', // Optional: pre-fill subject and body
     );
-    
+
     try {
       if (await canLaunchUrl(emailUri)) {
         await launchUrl(
@@ -45,16 +46,13 @@ class ContactCard extends StatelessWidget {
   Future<void> _launchWhatsApp() async {
     // Format the phone number (remove spaces, dashes, plus sign)
     String phoneNumber = detail.replaceAll(RegExp(r'[^\d+]'), '');
-    
+
     // Create WhatsApp URI
     final whatsappUri = Uri.parse('https://wa.me/$phoneNumber');
-    
+
     try {
       if (await canLaunchUrl(whatsappUri)) {
-        await launchUrl(
-          whatsappUri,
-          mode: LaunchMode.externalApplication,
-        );
+        await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
       } else {
         throw 'Could not launch WhatsApp';
       }
@@ -85,11 +83,7 @@ class ContactCard extends StatelessWidget {
                 color: color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(
-                icon,
-                size: 24,
-                color: color,
-              ),
+              child: Icon(icon, size: 24, color: color),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -107,14 +101,12 @@ class ContactCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     detail,
+                    textDirection: TextDirection.ltr,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -124,11 +116,7 @@ class ContactCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
-              Icons.chevron_right,
-              size: 20,
-              color: Colors.grey,
-            ),
+            const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
           ],
         ),
       ),

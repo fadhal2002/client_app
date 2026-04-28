@@ -39,7 +39,7 @@ class ResponseTimeInfo extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Response Time',
+                  'وقت الاستجابة المتوقع',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -48,11 +48,8 @@ class ResponseTimeInfo extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'We typically respond within 24 hours on business days',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  'نحن نسعى للرد على جميع الاستفسارات في غضون 24 ساعة خلال أيام الأسبوع، و48 ساعة خلال عطلة نهاية الأسبوع.',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),

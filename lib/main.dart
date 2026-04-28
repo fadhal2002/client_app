@@ -1,3 +1,7 @@
+/*
+  adb tcpip 5555
+  adb connect 192.168.3.74 
+*/
 import 'package:client_app/core/routes/app_routes.dart' show AppRoutes;
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/view/auth/login._screen.dart';
@@ -25,11 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return OverlaySupport.global(
       child: MaterialApp(
-        // locale: const Locale('ar'),
-        // supportedLocales: const [Locale('ar')],
 
-        // theme: ThemeData(fontFamily: 'Cairo'),
-
+        theme: ThemeData(fontFamily: 'Cairo'),
         builder: (context, child) {
           return Directionality(
             textDirection: TextDirection.rtl,

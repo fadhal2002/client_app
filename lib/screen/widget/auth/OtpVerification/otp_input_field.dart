@@ -8,11 +8,14 @@ class OtpInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Form(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(
-          6,
-          (index) => _buildOtpDigitField(context, index),
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(
+            6,
+            (index) => _buildOtpDigitField(context, index),
+          ),
         ),
       ),
     );
@@ -23,6 +26,7 @@ class OtpInputField extends StatelessWidget {
     return SizedBox(
       width: 41,
       child: TextFormField(
+        textDirection: TextDirection.ltr,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         maxLength: 1,

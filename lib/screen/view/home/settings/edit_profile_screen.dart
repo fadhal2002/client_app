@@ -28,6 +28,7 @@ class EditProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     AppServices appServices = Provider.of<AppServices>(context, listen: false);
     final loginModel = context.watch<LoginModelImp>();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FC),
@@ -37,7 +38,7 @@ class EditProfileView extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF1A1E2C)),
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
           },
         ),
         title: const Text(
@@ -50,74 +51,78 @@ class EditProfileView extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HeaderIlustration(
-                title: 'تعديل الملف الشخصي',
-                subtitle: 'قم بتحديث معلوماتك الشخصية لإبقاء ملفك محدثاً',
-                icon: Icons.person,
-              ),
+      body: Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HeaderIlustration(
+                  title: 'تعديل الملف الشخصي',
+                  subtitle: 'قم بتحديث معلوماتك الشخصية لإبقاء ملفك محدثاً',
+                  icon: Icons.person,
+                ),
 
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-              NameField(
-                name: 'الاسم الأول',
-                icon: Icons.account_circle_outlined,
-              ),
+                NameField(
+                  name: 'الاسم الأول',
+                  icon: Icons.account_circle_outlined,
+                ),
 
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              NameField(name: 'اسم العائلة', icon: Icons.badge),
+                NameField(name: 'اسم العائلة', icon: Icons.badge),
 
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-              PhoneNumberInput(
-                onInputChanged: (value) {},
-                isoCode: 'IQ',
-                controller: loginModel.phoneNumber,
-              ),
+                PhoneNumberInput(
+                  onInputChanged: (value) {},
+                  isoCode: 'IQ',
+                  controller: loginModel.phoneNumber,
+                ),
 
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-              ContinueButton(
-                onTap: () {
-                  if (loginModel.firstName.text.isEmpty ||
-                      loginModel.lastName.text.isEmpty) {
-                    customSnackbar(
-                      'خطأ',
-                      'يرجى إدخال الاسم الأول واسم العائلة.',
-                    );
-                  } else {
-                    customSnackbar('نجاح', 'تم حفظ البيانات بنجاح!');
+                ContinueButton(
+                  onTap: () {
+                    if (loginModel.firstName.text.isEmpty ||
+                        loginModel.lastName.text.isEmpty ||
+                        !formKey.currentState!.validate()) {
+                      customSnackbar(
+                        'خطأ',
+                        'يرجى ملء جميع الحقول بشكل صحيح قبل المتابعة.',
+                      );
+                    } else {
+                      customSnackbar('نجاح', 'تم تحديث الملف الشخصي بنجاح.');
 
-                    appServices.shared.setString(
-                      'firstName',
-                      loginModel.firstName.text.trim(),
-                    );
+                      appServices.shared.setString(
+                        'firstName',
+                        loginModel.firstName.text.trim(),
+                      );
 
-                    appServices.shared.setString(
-                      'lastName',
-                      loginModel.lastName.text.trim(),
-                    );
+                      appServices.shared.setString(
+                        'lastName',
+                        loginModel.lastName.text.trim(),
+                      );
 
-                    appServices.shared.setString(
-                      'phoneNumber',
-                      loginModel.phoneNumber.text.trim(),
-                    );
+                      appServices.shared.setString(
+                        'phoneNumber',
+                        loginModel.phoneNumber.text.trim(),
+                      );
 
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/HomePageState',
-                      (route) => false,
-                    );
-                  }
-                },
-              ),
-            ],
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/HomePageState',
+                        (route) => false,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

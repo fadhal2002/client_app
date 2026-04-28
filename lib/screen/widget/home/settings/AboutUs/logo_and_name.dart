@@ -6,7 +6,7 @@ class LogoAndName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return // App Logo and Name
-        Container(
+    Container(
       width: double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
@@ -47,7 +47,7 @@ class LogoAndName extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Text(
-            'Nakla',
+            'نقلة',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w700,
@@ -56,11 +56,8 @@ class LogoAndName extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Version 1.0.0',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
+            'الإصدار 1.0.0',
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
           ),
         ],
       ),
