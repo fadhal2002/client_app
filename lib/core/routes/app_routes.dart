@@ -2,7 +2,7 @@ import 'package:client_app/screen/view/auth/login._screen.dart';
 import 'package:client_app/screen/view/auth/name_input.dart';
 import 'package:client_app/screen/view/auth/otp_verification.dart';
 import 'package:client_app/screen/view/home/HomePage/AddDelivery/Location_Picker_screen.dart';
-import 'package:client_app/screen/view/home/HomePage/AddDelivery/add_delivery_screen.dart';
+import 'package:client_app/screen/view/home/HomePage/AddDelivery/ride_confirmation_screen.dart';
 import 'package:client_app/screen/view/home/HomePage/AddDelivery/route_map_screen.dart';
 import 'package:client_app/screen/view/home/HomePage/home_screen.dart';
 import 'package:client_app/screen/view/home/HomePage/home_screen_state.dart';
@@ -40,7 +40,7 @@ class AppRoutes {
       editProfileScreen: (context) => const EditProfileScreen(),
       aboutUsScreen: (context) => const AboutUsScreen(),
       helpCenterScreen: (context) => const HelpCenterScreen(),
-      addDeliveryScreen: (context) => const AddDeliveryScreen(),
+      // addDeliveryScreen: (context) => const AddDeliveryScreen(),
       locationPickerScreen: (context) => const LocationPickerScreen(),
       routeMapScreen: (context) => RouteMapScreen(),
     };

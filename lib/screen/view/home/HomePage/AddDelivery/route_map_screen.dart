@@ -1,3 +1,4 @@
+import 'package:client_app/screen/view/home/HomePage/AddDelivery/ride_confirmation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -17,12 +18,45 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> _suggestions = [];
 
-  LatLng get _selectedPoint =>
+  LatLng get pickUpPoint =>
       widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
+
+  // Define dropOffPoint as a variable that can be set
+  LatLng? _dropOffPoint;
+
+  // Getter for dropOffPoint
+  LatLng get dropOffPoint => _dropOffPoint ?? const LatLng(32.0259, 44.3615);
 
   List<LatLng> _routePoints = [];
   String _distance = "";
   String _duration = "";
+
+  Future<String> _getAddressFromLatLng(LatLng point) async {
+    final url =
+        "https://nominatim.openstreetmap.org/reverse"
+        "?lat=${point.latitude}"
+        "&lon=${point.longitude}"
+        "&format=json"
+        "&accept-language=ar";
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"User-Agent": "FlutterApp"},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        // full readable address
+        return data['display_name'] ?? "عنوان غير معروف";
+      }
+    } catch (e) {
+      print("❌ خطأ في جلب العنوان: $e");
+    }
+
+    return "عنوان غير معروف";
+  }
 
   Future<void> _getOSMSuggestions(String query) async {
     if (query.length < 2) {
@@ -51,7 +85,10 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
   }
 
   Future<void> _getRoute(LatLng destination) async {
-    final start = _selectedPoint;
+    final start = widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
+
+    // Store the destination as dropOffPoint
+    _dropOffPoint = destination;
 
     final url = Uri.parse(
       'https://router.project-osrm.org/route/v1/driving/'
@@ -115,16 +152,15 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
     final double lon = double.parse(item['lon']);
     final destination = LatLng(lat, lon);
 
-    LatLng _selectedPoint =
-        widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
+    LatLng pickUpPoint = widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
 
     setState(() {
-      _selectedPoint = destination;
+      pickUpPoint = destination;
       _suggestions = [];
       _searchController.text = item['display_name'];
     });
 
-    _mapController.move(_selectedPoint, 15.0);
+    _mapController.move(pickUpPoint, 15.0);
     _getRoute(destination);
   }
 
@@ -136,12 +172,12 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              initialCenter: _selectedPoint,
+              initialCenter: pickUpPoint,
               initialZoom: 12.0,
               onTap: (tapPosition, point) {
-                LatLng _selectedPoint =
+                LatLng pickUpPoint =
                     widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
-                setState(() => _selectedPoint = point);
+                setState(() => pickUpPoint = point);
                 _getRoute(point);
               },
             ),
@@ -168,21 +204,13 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
               MarkerLayer(
                 markers: [
                   Marker(
-                    point: _selectedPoint,
+                    point: pickUpPoint,
                     width: 80,
                     height: 80,
                     child: const Icon(
                       Icons.location_on,
                       color: Colors.red,
-                      size: 15,
-                    ),
-                  ),
-                  const Marker(
-                    point: LatLng(32.0259, 44.3615),
-                    child: Icon(
-                      Icons.my_location,
-                      color: Colors.blue,
-                      size: 30,
+                      size: 45,
                     ),
                   ),
                 ],
@@ -293,9 +321,27 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: () {
-                print(
-                  "الموقع: ${_selectedPoint.latitude}, ${_selectedPoint.longitude} | المسافة: $_distance",
+              onPressed: () async {
+                final address = await _getAddressFromLatLng(pickUpPoint);
+                final dropOffAddress = await _getAddressFromLatLng(
+                  dropOffPoint,
+                );
+                print("نقطة الانطلاق: $address |");
+                print("نقطة الوصول: $dropOffAddress |");
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RideConfirmationScreen(
+                      pickupLocation: pickUpPoint,
+                      dropoffLocation: dropOffPoint,
+                      pickupAddress: '$address',
+                      dropoffAddress: '$dropOffAddress',
+                      distance: '$_distance',
+                      duration: '$_duration',
+                      estimatedPrice: 0.0,
+                    ),
+                  ),
+                  (route) => false,
                 );
               },
               child: const Text(

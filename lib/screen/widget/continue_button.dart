@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ContinueButton extends StatelessWidget {
+  final String text;
   void Function()? onTap;
-  ContinueButton({super.key, required this.onTap});
+  ContinueButton({super.key,  this.text = 'استمر', required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +30,11 @@ class ContinueButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          child: const Padding(
+          child: Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Center(
               child: Text(
-                'استمر',
+                text,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
