@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
-class PaymentMethod extends StatelessWidget {
-  const PaymentMethod({super.key});
+class PaymentMethod extends StatefulWidget {
+  final Function(String)? onPaymentMethodChanged;
+
+  const PaymentMethod({super.key, this.onPaymentMethodChanged});
+
+  @override
+  State<PaymentMethod> createState() => _PaymentMethodState();
+}
+
+class _PaymentMethodState extends State<PaymentMethod> {
+  String _selectedPaymentMethod = 'cash'; // Default payment method
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +67,18 @@ class PaymentMethod extends StatelessWidget {
                 ),
               ),
 
-              RadioListTile(
+              RadioListTile<String>(
                 value: 'cash',
-                groupValue: 'cash',
-                onChanged: (value) {},
+                groupValue: _selectedPaymentMethod,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedPaymentMethod = value!;
+                  });
+                  // Notify parent widget if callback is provided
+                  if (widget.onPaymentMethodChanged != null) {
+                    widget.onPaymentMethodChanged!(_selectedPaymentMethod);
+                  }
+                },
                 title: const Text('الدفع عند الاستلام'),
                 subtitle: const Text('ادفع نقداً عند استلام الطلب'),
                 secondary: Container(
@@ -79,10 +96,18 @@ class PaymentMethod extends StatelessWidget {
                 activeColor: const Color(0xFF4158D0),
               ),
 
-              RadioListTile(
+              RadioListTile<String>(
                 value: 'card',
-                groupValue: 'cash',
-                onChanged: (value) {},
+                groupValue: _selectedPaymentMethod,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedPaymentMethod = value!;
+                  });
+                  // Notify parent widget if callback is provided
+                  if (widget.onPaymentMethodChanged != null) {
+                    widget.onPaymentMethodChanged!(_selectedPaymentMethod);
+                  }
+                },
                 title: const Text('بطاقة ائتمان'),
                 subtitle: const Text('Visa, Mastercard, Mada'),
                 secondary: Container(
@@ -104,5 +129,10 @@ class PaymentMethod extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  // Method to get the current selected payment method (optional)
+  String getSelectedPaymentMethod() {
+    return _selectedPaymentMethod;
   }
 }

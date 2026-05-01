@@ -1,23 +1,25 @@
+import 'package:client_app/models/home/HomePage/AddDelivery/ride_confirmation_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TripSummaryCard extends StatelessWidget {
   final String pickupAddress;
   final String dropoffAddress;
   final String distance;
   final String duration;
-  final double estimatedPrice;
 
-  TripSummaryCard({
+  const TripSummaryCard({
     super.key,
     required this.pickupAddress,
     required this.dropoffAddress,
     required this.distance,
     required this.duration,
-    required this.estimatedPrice,
   });
 
   @override
   Widget build(BuildContext context) {
+    final model = context.read<RideConfirmationModelImpl>();
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -115,7 +117,8 @@ class TripSummaryCard extends StatelessWidget {
                 _buildStatItem(
                   icon: Icons.attach_money,
                   label: 'السعر',
-                  value: '\$${estimatedPrice.toStringAsFixed(2)}',
+                  value:
+                      '${model.formatPrice(model.calculatePrice(distance, duration, 'economy'))}',
                 ),
               ],
             ),
@@ -123,7 +126,6 @@ class TripSummaryCard extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }
 

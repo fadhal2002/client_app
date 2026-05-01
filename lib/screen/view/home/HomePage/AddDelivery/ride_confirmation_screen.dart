@@ -1,11 +1,13 @@
+import 'package:client_app/models/home/HomePage/AddDelivery/ride_confirmation_model.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
 import 'package:client_app/screen/widget/custom_app_bar.dart';
-import 'package:client_app/screen/widget/home/HomePage/AddDelivery/RideConfirmation/payment_method.dart';
-import 'package:client_app/screen/widget/home/HomePage/AddDelivery/RideConfirmation/promo_code.dart';
-import 'package:client_app/screen/widget/home/HomePage/AddDelivery/RideConfirmation/ride_options_card.dart';
-import 'package:client_app/screen/widget/home/HomePage/AddDelivery/RideConfirmation/trip_summary_card.dart';
+import 'package:client_app/screen/widget/home/HomePage/QuickActions/AddDelivery/RideConfirmation/payment_method.dart';
+import 'package:client_app/screen/widget/home/HomePage/QuickActions/AddDelivery/RideConfirmation/promo_code.dart';
+import 'package:client_app/screen/widget/home/HomePage/QuickActions/AddDelivery/RideConfirmation/ride_options_card.dart';
+import 'package:client_app/screen/widget/home/HomePage/QuickActions/AddDelivery/RideConfirmation/trip_summary_card.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class RideConfirmationScreen extends StatelessWidget {
   final LatLng pickupLocation;
@@ -14,7 +16,6 @@ class RideConfirmationScreen extends StatelessWidget {
   final String dropoffAddress;
   final String distance;
   final String duration;
-  final double estimatedPrice;
 
   const RideConfirmationScreen({
     super.key,
@@ -24,7 +25,39 @@ class RideConfirmationScreen extends StatelessWidget {
     required this.dropoffAddress,
     required this.distance,
     required this.duration,
-    required this.estimatedPrice,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => RideConfirmationModelImpl(),
+      child: RideConfirmationView(
+        pickupLocation: pickupLocation,
+        dropoffLocation: dropoffLocation,
+        pickupAddress: pickupAddress,
+        dropoffAddress: dropoffAddress,
+        distance: distance,
+        duration: duration,
+      ),
+    );
+  }
+}
+
+class RideConfirmationView extends StatelessWidget {
+  final LatLng pickupLocation;
+  final LatLng dropoffLocation;
+  final String pickupAddress;
+  final String dropoffAddress;
+  final String distance;
+  final String duration;
+  const RideConfirmationView({
+    super.key,
+    required this.pickupLocation,
+    required this.dropoffLocation,
+    required this.pickupAddress,
+    required this.dropoffAddress,
+    required this.distance,
+    required this.duration,
   });
 
   @override
@@ -35,7 +68,7 @@ class RideConfirmationScreen extends StatelessWidget {
         title: 'تأكيد الرحلة',
         onPressed: () => Navigator.pushNamedAndRemoveUntil(
           context,
-          '/HomeScreen',
+          '/HomeScreenState',
           (route) => false,
         ),
       ),
@@ -52,12 +85,11 @@ class RideConfirmationScreen extends StatelessWidget {
                     dropoffAddress: dropoffAddress,
                     distance: distance,
                     duration: duration,
-                    estimatedPrice: estimatedPrice,
                   ),
 
                   const SizedBox(height: 20),
 
-                  RideOptionsCard(estimatedPrice: estimatedPrice),
+                  RideOptionsCard(distance: distance, duration: duration),
 
                   const SizedBox(height: 20),
 

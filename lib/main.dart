@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return OverlaySupport.global(
       child: MaterialApp(
-
         theme: ThemeData(fontFamily: 'Cairo'),
         builder: (context, child) {
           return Directionality(

@@ -175,6 +175,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
               initialCenter: pickUpPoint,
               initialZoom: 12.0,
               onTap: (tapPosition, point) {
+                print("نقطة مختارة: ${point.latitude}, ${point.longitude}");
                 LatLng pickUpPoint =
                     widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
                 setState(() => pickUpPoint = point);
@@ -338,7 +339,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                       dropoffAddress: '$dropOffAddress',
                       distance: '$_distance',
                       duration: '$_duration',
-                      estimatedPrice: 0.0,
                     ),
                   ),
                   (route) => false,

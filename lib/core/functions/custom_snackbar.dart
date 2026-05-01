@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-void customSnackbar(String title, String message) {
+void customSnackbar(String title, String message, {bool isWhite = true}) {
   showOverlayNotification(
     (context) {
       return SafeArea(
@@ -11,7 +11,9 @@ void customSnackbar(String title, String message) {
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.white, // Light background
+              color: isWhite
+                  ? const Color(0xFF2D2D2D)
+                  : Colors.white, // Dark background for non-white
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
@@ -39,8 +41,10 @@ void customSnackbar(String title, String message) {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          color: Color(0xFF1A1A1A), // Dark gray for title
+                        style: TextStyle(
+                          color: isWhite
+                              ? Colors.white
+                              : const Color(0xFF1A1A1A),
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
@@ -48,8 +52,10 @@ void customSnackbar(String title, String message) {
                       const SizedBox(height: 2),
                       Text(
                         message,
-                        style: const TextStyle(
-                          color: Color(0xFF666666), // Medium gray for message
+                        style: TextStyle(
+                          color: isWhite
+                              ? const Color(0xFFCCCCCC)
+                              : const Color(0xFF666666),
                           fontSize: 13,
                         ),
                       ),
