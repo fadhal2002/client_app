@@ -4,9 +4,14 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LocationPickerScreen extends StatefulWidget {
-  const LocationPickerScreen({super.key});
+
+  const LocationPickerScreen({
+    super.key,
+  });
 
   @override
   State<LocationPickerScreen> createState() => _LocationPickerScreenState();
@@ -45,27 +50,68 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     }
   }
 
-void _selectLocation(dynamic item) {
-  // 1. تحويل القيمة إلى String ثم محاولة تحليلها
-  // نستخدم ?? '' لتجنب الـ null
-  final lat = double.tryParse(item['lat']?.toString() ?? '');
-  final lon = double.tryParse(item['lon']?.toString() ?? '');
+  void _selectLocation(dynamic item) {
+    final lat = double.tryParse(item['lat']?.toString() ?? '');
+    final lon = double.tryParse(item['lon']?.toString() ?? '');
 
-  // 2. التحقق من أن القيم تم تحليلها بنجاح وليست null
-  if (lat != null && lon != null) {
-    setState(() {
-      _selectedPoint = LatLng(lat, lon);
-      _suggestions = [];
-      // إضافة تحوط بسيط لاسم المكان
-      _searchController.text = item['display_name']?.toString() ?? 'Unknown Location';
-    });
+    if (lat != null && lon != null) {
+      setState(() {
+        _selectedPoint = LatLng(lat, lon);
+        _suggestions = [];
+        _searchController.text =
+            item['display_name']?.toString() ?? 'Unknown Location';
+      });
 
-    _mapController.move(_selectedPoint, 15.0);
-  } else {
-    // 3. معالجة حالة الخطأ (مثلاً طباعة رسالة أو تنبيه المستخدم)
-    debugPrint("❌ تعذر اختيار الموقع: بيانات الإحداثيات غير صالحة: $item");
+      _mapController.move(_selectedPoint, 15.0);
+    } else {
+      debugPrint("❌ تعذر اختيار الموقع: بيانات الإحداثيات غير صالحة: $item");
+    }
   }
-}
+
+  // 📌 دالة حفظ الموقع في الفايربيز
+  Future<void> _saveLocationToFirestore() async {
+    try {
+      // 1. التحقق من صحة الموقع (لتجنب القيم الصفرية [0, 0])
+      if (_selectedPoint.latitude == 0.0 && _selectedPoint.longitude == 0.0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('⚠️ يرجى اختيار موقع صحيح على الخريطة أولاً'),
+          ),
+        );
+        return;
+      }
+
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception("يجب تسجيل الدخول أولاً");
+      }
+
+      String locationName = _searchController.text.trim();
+      if (locationName.isEmpty) {
+        locationName = 'موقع غير مسمى';
+      }
+
+      final collection = FirebaseFirestore.instance.collection('orders');
+
+      // 2. إرسال البيانات
+      await collection.add({
+        'user_id': user.uid,
+        'name': locationName,
+        'D': GeoPoint(_selectedPoint.latitude, _selectedPoint.longitude),
+        'DP': GeoPoint(_selectedPoint.latitude, _selectedPoint.longitude),
+        'created_at': FieldValue.serverTimestamp(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('✅ تم حفظ الموقع بنجاح')),
+      );
+    } catch (e) {
+      print("❌ خطأ أثناء حفظ الموقع: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('حدث خطأ أثناء الحفظ: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +150,6 @@ void _selectLocation(dynamic item) {
               ),
             ],
           ),
-
           Positioned(
             top: 50,
             left: 15,
@@ -171,7 +216,6 @@ void _selectLocation(dynamic item) {
               ],
             ),
           ),
-
           Positioned(
             bottom: 30,
             left: 20,
@@ -184,10 +228,13 @@ void _selectLocation(dynamic item) {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 print(
                   "تم اختيار الموقع: ${_selectedPoint.latitude}, ${_selectedPoint.longitude}",
                 );
+
+                // 3. نقوم بالحفظ قبل الانتقال للشاشة التالية
+                await _saveLocationToFirestore();
 
                 Navigator.pushAndRemoveUntil(
                   context,

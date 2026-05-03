@@ -1,6 +1,7 @@
 /*
   adb tcpip 5555
   adb connect 192.168.3.74 
+  
 */
 import 'package:client_app/core/routes/app_routes.dart' show AppRoutes;
 import 'package:client_app/core/servers/app_servers.dart';

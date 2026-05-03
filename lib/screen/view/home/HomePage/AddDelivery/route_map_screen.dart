@@ -4,10 +4,14 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 
 class RouteMapScreen extends StatefulWidget {
-  LatLng? selectedPoint;
-  RouteMapScreen({super.key, this.selectedPoint});
+  final LatLng? selectedPoint;
+
+  const RouteMapScreen({super.key, this.selectedPoint});
 
   @override
   State<RouteMapScreen> createState() => _RouteMapScreenState();
@@ -18,19 +22,62 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> _suggestions = [];
 
+  // نقطة الانطلاق: تأخذ الموقع المحدد مسبقاً أو الموقع الافتراضي
   LatLng get pickUpPoint =>
       widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
 
-  // Define dropOffPoint as a variable that can be set
   LatLng? _dropOffPoint;
 
-  // Getter for dropOffPoint
-  LatLng get dropOffPoint => _dropOffPoint ?? const LatLng(32.0259, 44.3615);
+  // نقطة الوصول: تأخذ موقع الوصول المختار
+  LatLng get dropOffPoint => _dropOffPointNotNull(_dropOffPoint);
+
+  LatLng _dropOffPointNotNull(LatLng? point) {
+    return point ?? const LatLng(32.0259, 44.3615);
+  }
 
   List<LatLng> _routePoints = [];
   String _distance = "";
   String _duration = "";
 
+  // 📌 دالة حفظ الطلب والموقع في الفايربيز (Firestore)
+  Future<void> _saveLocationToFirestore() async {
+    try {
+      // 1. التحقق من صحة نقطة الانطلاق لتجنب القيم الصفرية [0, 0]
+      if (pickUpPoint.latitude == 0.0 && pickUpPoint.longitude == 0.0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('⚠️ يرجى اختيار موقع صحيح على الخريطة أولاً'),
+          ),
+        );
+        return;
+      }
+
+      String locationName = _searchController.text.trim();
+      if (locationName.isEmpty) {
+        locationName = ' HaPPY DELIVERY       ';
+      }
+
+      final collection = FirebaseFirestore.instance.collection('orders');
+
+      // 3. إرسال البيانات إلى مجموعة Orders
+      await collection.add({
+        'name': locationName,
+        'D': GeoPoint(pickUpPoint.latitude, pickUpPoint.longitude), // نقطة الانطلاق
+        'DP': GeoPoint(dropOffPoint.latitude, dropOffPoint.longitude), // نقطة الوصول
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('✅ تم حفظ الطلب بنجاح في قاعدة البيانات')),
+      );
+    } catch (e) {
+      print("❌ خطأ أثناء حفظ الطلب: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('حدث خطأ أثناء الحفظ: $e')),
+      );
+    }
+  }
+
+  // 📌 جلب العنوان النصي بناءً على الإحداثيات
   Future<String> _getAddressFromLatLng(LatLng point) async {
     final url =
         "https://nominatim.openstreetmap.org/reverse"
@@ -47,8 +94,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-
-        // full readable address
         return data['display_name'] ?? "عنوان غير معروف";
       }
     } catch (e) {
@@ -58,6 +103,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
     return "عنوان غير معروف";
   }
 
+  // 📌 جلب الاقتراحات للبحث
   Future<void> _getOSMSuggestions(String query) async {
     if (query.length < 2) {
       setState(() => _suggestions = []);
@@ -84,11 +130,13 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
     }
   }
 
+  // 📌 رسم المسار وتحديث المسافة والوقت
   Future<void> _getRoute(LatLng destination) async {
     final start = widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
 
-    // Store the destination as dropOffPoint
-    _dropOffPoint = destination;
+    setState(() {
+      _dropOffPoint = destination;
+    });
 
     final url = Uri.parse(
       'https://router.project-osrm.org/route/v1/driving/'
@@ -101,66 +149,42 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final route = data['routes'][0];
+        if (data['routes'] != null && data['routes'].isNotEmpty) {
+          final route = data['routes'][0];
 
-        setState(() {
-          _routePoints = _decodePolyline(route['geometry']);
-          _distance = "${(route['distance'] / 1000).toStringAsFixed(1)} كم";
-          _duration = "${(route['duration'] / 60).toStringAsFixed(0)} دقيقة";
-        });
+          // فك تشفير المسار
+          final decodedPoints = decodePolyline(route['geometry']);
+
+          setState(() {
+            _routePoints = decodedPoints
+                .map(
+                  (point) => LatLng(point[0].toDouble(), point[1].toDouble()),
+                )
+                .toList();
+
+            _distance = "${(route['distance'] / 1000).toStringAsFixed(1)} كم";
+            _duration = "${(route['duration'] / 60).toStringAsFixed(0)} دقيقة";
+          });
+        }
       }
     } catch (e) {
       print("❌ خطأ في حساب الطريق: $e");
     }
   }
 
-  List<LatLng> _decodePolyline(String encoded) {
-    List<LatLng> points = [];
-    int index = 0, len = encoded.length;
-    int lat = 0, lng = 0;
-
-    while (index < len) {
-      int b, shift = 0, result = 0;
-
-      do {
-        b = encoded.codeUnitAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-
-      lat += ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-
-      shift = 0;
-      result = 0;
-
-      do {
-        b = encoded.codeUnitAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-
-      lng += ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-
-      points.add(LatLng(lat / 1E5, lng / 1E5));
-    }
-
-    return points;
-  }
-
+  // 📌 تحديد الموقع من القائمة المنسدلة
   void _selectLocation(dynamic item) {
-    final double lat = double.parse(item['lat']);
-    final double lon = double.parse(item['lon']);
+    final double lat = double.parse(item['lat'].toString());
+    final double lon = double.parse(item['lon'].toString());
     final destination = LatLng(lat, lon);
 
-    LatLng pickUpPoint = widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
-
     setState(() {
-      pickUpPoint = destination;
+      _dropOffPoint = destination;
       _suggestions = [];
-      _searchController.text = item['display_name'];
+      _searchController.text = item['display_name'].toString();
     });
 
-    _mapController.move(pickUpPoint, 15.0);
+    _mapController.move(destination, 15.0);
     _getRoute(destination);
   }
 
@@ -175,10 +199,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
               initialCenter: pickUpPoint,
               initialZoom: 12.0,
               onTap: (tapPosition, point) {
-                print("نقطة مختارة: ${point.latitude}, ${point.longitude}");
-                LatLng pickUpPoint =
-                    widget.selectedPoint ?? const LatLng(32.0259, 44.3615);
-                setState(() => pickUpPoint = point);
+                print("نقطة الوصول مختارة: ${point.latitude}, ${point.longitude}");
                 _getRoute(point);
               },
             ),
@@ -189,11 +210,10 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                 subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.pondo.ai',
               ),
-
               PolylineLayer(
                 polylines: _routePoints.isEmpty
-                    ? <Polyline<Object>>[]
-                    : <Polyline<Object>>[
+                    ? <Polyline>[]
+                    : <Polyline>[
                         Polyline(
                           points: _routePoints,
                           strokeWidth: 5,
@@ -201,24 +221,35 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                         ),
                       ],
               ),
-
               MarkerLayer(
                 markers: [
+                  // نقطة الانطلاق
                   Marker(
                     point: pickUpPoint,
                     width: 80,
                     height: 80,
                     child: const Icon(
-                      Icons.location_on,
-                      color: Colors.red,
+                      Icons.my_location,
+                      color: Colors.green,
                       size: 45,
                     ),
                   ),
+                  // نقطة الوصول
+                  if (_dropOffPoint != null)
+                    Marker(
+                      point: dropOffPoint,
+                      width: 80,
+                      height: 80,
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                        size: 45,
+                      ),
+                    ),
                 ],
               ),
             ],
           ),
-
           Positioned(
             top: 50,
             left: 15,
@@ -243,7 +274,9 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                           setState(() {
                             _suggestions = [];
                             _routePoints = [];
+                            _dropOffPoint = null;
                             _distance = "";
+                            _duration = "";
                           });
                         },
                       ),
@@ -255,7 +288,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                     ),
                   ),
                 ),
-
                 if (_suggestions.isNotEmpty)
                   Container(
                     margin: const EdgeInsets.only(top: 5),
@@ -290,7 +322,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
               ],
             ),
           ),
-
           if (_distance.isNotEmpty)
             Positioned(
               bottom: 110,
@@ -309,7 +340,6 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                 ),
               ),
             ),
-
           Positioned(
             bottom: 30,
             left: 20,
@@ -323,22 +353,39 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                 ),
               ),
               onPressed: () async {
+                if (_dropOffPoint == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        '⚠️ يرجى تحديد نقطة الوصول على الخريطة أو البحث عنها أولاً',
+                      ),
+                    ),
+                  );
+                  return;
+                }
+
+                // 📌 حفظ الموقع والطلب في فايربيز أولاً
+                await _saveLocationToFirestore();
+
                 final address = await _getAddressFromLatLng(pickUpPoint);
                 final dropOffAddress = await _getAddressFromLatLng(
                   dropOffPoint,
                 );
-                print("نقطة الانطلاق: $address |");
-                print("نقطة الوصول: $dropOffAddress |");
+
+                print("نقطة الانطلاق (D): $address");
+                print("نقطة الوصول (DP): $dropOffAddress");
+
+                // 📌 الانتقال للشاشة التالية بعد الحفظ بنجاح
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) => RideConfirmationScreen(
                       pickupLocation: pickUpPoint,
                       dropoffLocation: dropOffPoint,
-                      pickupAddress: '$address',
-                      dropoffAddress: '$dropOffAddress',
-                      distance: '$_distance',
-                      duration: '$_duration',
+                      pickupAddress: address,
+                      dropoffAddress: dropOffAddress,
+                      distance: _distance,
+                      duration: _duration,
                     ),
                   ),
                   (route) => false,
