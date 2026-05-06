@@ -1,5 +1,10 @@
 import 'package:client_app/core/functions/custom_snackbar.dart';
+import 'package:client_app/core/servers/app_servers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 abstract class RideConfirmationModel extends ChangeNotifier {
   calculatePrice(String distance, String duration, String vehicleType);
@@ -8,6 +13,15 @@ abstract class RideConfirmationModel extends ChangeNotifier {
   updateBaseRates({double? newBaseFare, double? newPerKmRate});
   selectVehicleType(String vehicleType);
   applyPromo();
+  placeOrder(
+    BuildContext context,
+    LatLng pickUpPoint,
+    LatLng dropOffPoint,
+    String pickupAddress,
+    String dropoffAddress,
+    String distance,
+    String duration,
+  );
 
   String? errorText;
   String _selectedVehicleType = 'economy';
@@ -142,6 +156,73 @@ class RideConfirmationModelImpl extends RideConfirmationModel {
     if (finalPrice2 == null) return;
 
     notifyListeners();
+  }
+
+  @override
+  Future<void> placeOrder(
+    BuildContext context,
+    LatLng pickUpPoint,
+    LatLng dropOffPoint,
+    String pickupAddress,
+    String dropoffAddress,
+    String distance,
+    String duration,
+  ) async {
+    AppServices appServices = Provider.of<AppServices>(context, listen: false);
+    try {
+      // 1. التحقق من صحة نقطة الانطلاق لتجنب القيم الصفرية [0, 0]
+      if (pickUpPoint.latitude == 0.0 && pickUpPoint.longitude == 0.0) {
+        customSnackbar(
+          'خريطة غير صالحة',
+          '⚠️ يرجى اختيار موقع صحيح على الخريطة أولاً',
+        );
+        return;
+      }
+      final collection = FirebaseFirestore.instance.collection('orders');
+
+      await collection.add({
+        // Basic order info
+        'orderId': DateTime.now().millisecondsSinceEpoch.toString(),
+        'orderStatus': 'قيد الانتظار',
+        'orderDate': DateTime.now(),
+
+        // Customer info (you should get these from your auth/user model)
+        'customerId': FirebaseAuth.instance.currentUser?.uid ?? 'unknown',
+        'customerName':
+            '${appServices.shared.getString("firstName")} ${appServices.shared.getString("lastName")}',
+        'customerPhone': '${appServices.shared.getString("phoneNumber")}',
+
+        // Delivery locations
+        'pickupLocation': GeoPoint(pickUpPoint.latitude, pickUpPoint.longitude),
+        'pickupAddress': pickupAddress,
+        'dropoffLocation': GeoPoint(
+          dropOffPoint.latitude,
+          dropOffPoint.longitude,
+        ),
+        'dropoffAddress': dropoffAddress,
+
+        // Delivery details
+        'distance': distance,
+        'duration': duration,
+        'estimatedPrice': '$finalPrice2',
+        'selectedVehicleType': _selectedVehicleType,
+
+        // Driver info (will be assigned later)
+        'driverId': '',
+        'driverName': 'مرتضى',
+        'driverPhone': '07837822557',
+
+        // Payment info
+        'paymentMethod': 'cash',
+
+        // Metadata
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      customSnackbar('تأكيد الطلب', 'تم حفظ الطلب بنجاح في قاعدة البيانات');
+    } catch (e) {
+      customSnackbar('تأكيد الطلب', 'حدث خطأ أثناء الحفظ: $e');
+    }
   }
 
   @override

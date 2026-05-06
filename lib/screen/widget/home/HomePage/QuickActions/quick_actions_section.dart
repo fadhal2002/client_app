@@ -1,5 +1,7 @@
-import 'package:client_app/screen/view/home/HomePage/AddDelivery/route_map_screen.dart'; 
+import 'package:client_app/screen/view/home/HomePage/AddDelivery/route_map_screen.dart';
+import 'package:client_app/screen/view/home/HomePage/orders_history_screen.dart';
 import 'package:flutter/material.dart';
+
 class QuickActionsSection extends StatelessWidget {
   const QuickActionsSection({super.key});
 
@@ -46,7 +48,7 @@ class QuickActionsSection extends StatelessWidget {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>   const  RouteMapScreen(),
+                      builder: (context) => const RouteMapScreen(),
                     ),
                     (route) => false,
                   );
@@ -57,7 +59,9 @@ class QuickActionsSection extends StatelessWidget {
                 icon: Icons.history,
                 title: 'السجل',
                 color: const Color(0xFFFF9800),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/OrdersHistoryScreen');
+                },
               ),
               const SizedBox(width: 12),
               _buildQuickAction(
@@ -65,7 +69,12 @@ class QuickActionsSection extends StatelessWidget {
                 title: 'الدعم',
                 color: const Color(0xFF4CAF50),
                 onTap: () {
-                  Navigator.pushNamed(context, '/HelpCenterScreen');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const OrdersHistoryScreen(),
+                    ),
+                  );
                 },
               ),
             ],

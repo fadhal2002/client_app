@@ -40,42 +40,42 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
   String _duration = "";
 
   // 📌 دالة حفظ الطلب والموقع في الفايربيز (Firestore)
-  Future<void> _saveLocationToFirestore() async {
-    try {
-      // 1. التحقق من صحة نقطة الانطلاق لتجنب القيم الصفرية [0, 0]
-      if (pickUpPoint.latitude == 0.0 && pickUpPoint.longitude == 0.0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('⚠️ يرجى اختيار موقع صحيح على الخريطة أولاً'),
-          ),
-        );
-        return;
-      }
+  // Future<void> _saveLocationToFirestore() async {
+  //   try {
+  //     // 1. التحقق من صحة نقطة الانطلاق لتجنب القيم الصفرية [0, 0]
+  //     if (pickUpPoint.latitude == 0.0 && pickUpPoint.longitude == 0.0) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('⚠️ يرجى اختيار موقع صحيح على الخريطة أولاً'),
+  //         ),
+  //       );
+  //       return;
+  //     }
 
-      String locationName = _searchController.text.trim();
-      if (locationName.isEmpty) {
-        locationName = ' HaPPY DELIVERY       ';
-      }
+  //     String locationName = _searchController.text.trim();
+  //     if (locationName.isEmpty) {
+  //       locationName = ' HaPPY DELIVERY       ';
+  //     }
 
-      final collection = FirebaseFirestore.instance.collection('orders');
+  //     final collection = FirebaseFirestore.instance.collection('orders');
 
-      // 3. إرسال البيانات إلى مجموعة Orders
-      await collection.add({
-        'name': locationName,
-        'D': GeoPoint(pickUpPoint.latitude, pickUpPoint.longitude), // نقطة الانطلاق
-        'DP': GeoPoint(dropOffPoint.latitude, dropOffPoint.longitude), // نقطة الوصول
-      });
+  //     // 3. إرسال البيانات إلى مجموعة Orders
+  //     await collection.add({
+  //       'name': locationName,
+  //       'D': GeoPoint(pickUpPoint.latitude, pickUpPoint.longitude), // نقطة الانطلاق
+  //       'DP': GeoPoint(dropOffPoint.latitude, dropOffPoint.longitude), // نقطة الوصول
+  //     });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ تم حفظ الطلب بنجاح في قاعدة البيانات')),
-      );
-    } catch (e) {
-      print("❌ خطأ أثناء حفظ الطلب: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('حدث خطأ أثناء الحفظ: $e')),
-      );
-    }
-  }
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('✅ تم حفظ الطلب بنجاح في قاعدة البيانات')),
+  //     );
+  //   } catch (e) {
+  //     print("❌ خطأ أثناء حفظ الطلب: $e");
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('حدث خطأ أثناء الحفظ: $e')),
+  //     );
+  //   }
+  // }
 
   // 📌 جلب العنوان النصي بناءً على الإحداثيات
   Future<String> _getAddressFromLatLng(LatLng point) async {
@@ -365,7 +365,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                 }
 
                 // 📌 حفظ الموقع والطلب في فايربيز أولاً
-                await _saveLocationToFirestore();
+                // await _saveLocationToFirestore();
 
                 final address = await _getAddressFromLatLng(pickUpPoint);
                 final dropOffAddress = await _getAddressFromLatLng(

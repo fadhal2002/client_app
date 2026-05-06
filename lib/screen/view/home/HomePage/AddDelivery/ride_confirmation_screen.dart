@@ -62,13 +62,18 @@ class RideConfirmationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rideConfirmationModelImpl = Provider.of<RideConfirmationModelImpl>(
+      context,
+      listen: false,
+    );
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FC),
       appBar: CustomAppBar(
         title: 'تأكيد الرحلة',
         onPressed: () => Navigator.pushNamedAndRemoveUntil(
           context,
-          '/HomeScreenState',
+          '/HomePageState',
           (route) => false,
         ),
       ),
@@ -121,8 +126,21 @@ class RideConfirmationView extends StatelessWidget {
             ),
             child: ContinueButton(
               text: 'تأكيد الرحلة',
-              onTap: () {
-                // Handle continue action
+              onTap: () async {
+                await rideConfirmationModelImpl.placeOrder(
+                  context,
+                  pickupLocation,
+                  dropoffLocation,
+                  pickupAddress,
+                  dropoffAddress,
+                  distance,
+                  duration,
+                );
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/HomePageState',
+                  (route) => false,
+                );
               },
             ),
           ),

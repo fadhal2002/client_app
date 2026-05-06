@@ -6,6 +6,7 @@ import 'package:client_app/screen/view/auth/otp_verification.dart';
 import 'package:client_app/screen/view/home/HomePage/AddDelivery/route_map_screen.dart';
 import 'package:client_app/screen/view/home/HomePage/home_screen.dart';
 import 'package:client_app/screen/view/home/HomePage/home_screen_state.dart';
+import 'package:client_app/screen/view/home/HomePage/orders_history_screen.dart';
 import 'package:client_app/screen/view/home/settings/about_us_screen.dart';
 import 'package:client_app/screen/view/home/settings/edit_profile_screen.dart';
 import 'package:client_app/screen/view/home/settings/help_center_screen.dart';
@@ -27,6 +28,7 @@ class AppRoutes {
   static const String addDeliveryScreen = '/AddDeliveryScreen';
   static const String locationPickerScreen = '/LocationPickerScreen';
   static const String routeMapScreen = '/RouteMapScreen';
+  static const String ordersHistoryScreen = '/OrdersHistoryScreen';
 
   static Map<String, WidgetBuilder> get routes {
     return {
@@ -40,10 +42,8 @@ class AppRoutes {
       editProfileScreen: (context) => const EditProfileScreen(),
       aboutUsScreen: (context) => const AboutUsScreen(),
       helpCenterScreen: (context) => const HelpCenterScreen(),
-      // addDeliveryScreen: (context) => const AddDeliveryScreen(),
-      // locationPickerScreen: (context) => const LocationPickerScreen(), لان يحتاجه بعد الان 
-
       routeMapScreen: (context) => RouteMapScreen(),
+      ordersHistoryScreen: (context) => OrdersHistoryScreen(),
     };
   }
 }
