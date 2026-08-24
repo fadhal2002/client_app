@@ -7,7 +7,7 @@ class AuthPhoneHint extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       'يرجى إدخال رقم هاتفك لتلقي رمز التحقق',
-      style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.85)),
+      style: TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.85)),
       textAlign: TextAlign.center,
     );
   }

@@ -17,7 +17,7 @@ class VerificationPrompt extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -41,7 +41,7 @@ class VerificationPrompt extends StatelessWidget {
             'لقد أرسلنا رمز التحقق إلى',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
           const SizedBox(height: 4),
@@ -58,7 +58,7 @@ class VerificationPrompt extends StatelessWidget {
             'عبر واتساب',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
         ],

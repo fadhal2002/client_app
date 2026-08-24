@@ -21,7 +21,7 @@ class HeaderIlustration extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: Colors.grey.withValues(alpha: 0.08),
             spreadRadius: 2,
             blurRadius: 20,
             offset: const Offset(0, 4),
@@ -33,7 +33,7 @@ class HeaderIlustration extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF4158D0).withOpacity(0.1),
+              color: const Color(0xFF4158D0).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: Color(0xFF4158D0), size: 48),

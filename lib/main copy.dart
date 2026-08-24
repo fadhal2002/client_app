@@ -412,7 +412,7 @@ PolylineLayer(
             Positioned(
               bottom: 110, left: 20, right: 20,
               child: Card(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Row(

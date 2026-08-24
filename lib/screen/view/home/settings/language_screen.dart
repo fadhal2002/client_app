@@ -1,6 +1,6 @@
 import 'package:client_app/screen/widget/continue_button.dart';
 import 'package:client_app/screen/widget/header_ilustration.dart';
-import 'package:client_app/screen/widget/home/settings/language/language_card.dart';
+import 'package:client_app/screen/widget/home/settings/Language/language_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

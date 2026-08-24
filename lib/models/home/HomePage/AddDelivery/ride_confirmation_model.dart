@@ -1,9 +1,9 @@
 import 'package:client_app/core/functions/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:nanoid_plus/nanoid_plus.dart';
 import 'package:provider/provider.dart';
 
 abstract class RideConfirmationModel extends ChangeNotifier {
@@ -179,15 +179,17 @@ class RideConfirmationModelImpl extends RideConfirmationModel {
         return;
       }
       final collection = FirebaseFirestore.instance.collection('orders');
+      final customerId = Nanoid().urlSafe(length: 10);
+      final orderId = Nanoid().urlSafe(length: 10);
 
       await collection.add({
         // Basic order info
-        'orderId': DateTime.now().millisecondsSinceEpoch.toString(),
+        'orderId': orderId,
         'orderStatus': 'قيد الانتظار',
         'orderDate': DateTime.now(),
 
         // Customer info (you should get these from your auth/user model)
-        'customerId': FirebaseAuth.instance.currentUser?.uid ?? 'unknown',
+        'customerId': customerId,
         'customerName':
             '${appServices.shared.getString("firstName")} ${appServices.shared.getString("lastName")}',
         'customerPhone': '${appServices.shared.getString("phoneNumber")}',
@@ -219,6 +221,8 @@ class RideConfirmationModelImpl extends RideConfirmationModel {
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       });
+
+      appServices.shared.setString('customerId', customerId);
       customSnackbar('تأكيد الطلب', 'تم حفظ الطلب بنجاح في قاعدة البيانات');
     } catch (e) {
       customSnackbar('تأكيد الطلب', 'حدث خطأ أثناء الحفظ: $e');

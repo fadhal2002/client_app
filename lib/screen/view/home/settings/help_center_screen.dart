@@ -3,7 +3,6 @@ import 'package:client_app/screen/widget/home/settings/HelpCenter/build_contact_
 import 'package:client_app/screen/widget/home/settings/HelpCenter/contact_card.dart';
 import 'package:client_app/screen/widget/home/settings/HelpCenter/response_time_info.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ContinueButton extends StatelessWidget {
   final String text;
   void Function()? onTap;
-  ContinueButton({super.key,  this.text = 'استمر', required this.onTap});
+  ContinueButton({super.key, this.text = 'استمر', required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ContinueButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4158D0).withOpacity(0.3),
+            color: const Color(0xFF4158D0).withValues(alpha: 0.3),
             spreadRadius: 1,
             blurRadius: 12,
             offset: const Offset(0, 4),

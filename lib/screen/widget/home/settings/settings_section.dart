@@ -18,7 +18,7 @@ class SettingsSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.05),
+            color: Colors.grey.withValues(alpha: 0.05),
             spreadRadius: 2,
             blurRadius: 10,
           ),
@@ -55,7 +55,7 @@ Widget _buildSettingsItem(SettingsItem item) {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF4158D0).withOpacity(0.1),
+              color: const Color(0xFF4158D0).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(item.icon, size: 20, color: const Color(0xFF4158D0)),

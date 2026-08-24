@@ -6,6 +6,7 @@ class OrdersHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -58,7 +59,10 @@ class _BuildFilterTabs extends StatelessWidget {
         labelColor: Color(0xFF2563EB),
         unselectedLabelColor: Colors.grey,
         labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
@@ -68,10 +72,7 @@ class _OrdersList extends StatelessWidget {
   final String? statusFilter;
   final bool showAll;
 
-  const _OrdersList({
-    this.statusFilter,
-    this.showAll = false,
-  });
+  const _OrdersList({this.statusFilter, this.showAll = false});
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +84,10 @@ class _OrdersList extends StatelessWidget {
         orderTime: '05:39',
         customerName: 'فاضل عباس',
         customerPhone: '783 782 2558',
-        pickupAddress: 'حي العدالة, ناحية مرکز قضاء النجف, قضاء النجف, محافظة النجف, 54003, العراق',
-        dropoffAddress: 'حي السلام, ناحية مرکز قضاء النجف, قضاء النجف, محافظة النجف, 54001, العراق',
+        pickupAddress:
+            'حي العدالة, ناحية مرکز قضاء النجف, قضاء النجف, محافظة النجف, 54003, العراق',
+        dropoffAddress:
+            'حي السلام, ناحية مرکز قضاء النجف, قضاء النجف, محافظة النجف, 54001, العراق',
         distance: '3.8 كم',
         duration: '5 دقيقة',
         estimatedPrice: '8750',
@@ -176,11 +179,7 @@ class _OrdersList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.inbox_outlined,
-              size: 80,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.inbox_outlined, size: 80, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               'لا توجد طلبات',
@@ -193,10 +192,7 @@ class _OrdersList extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'سجل الطلبات الخاصة بك سيظهر هنا',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -213,7 +209,7 @@ class _OrdersList extends StatelessWidget {
     // Determine status color and display text
     Color statusColor;
     String statusText;
-    
+
     if (order.orderStatus == 'مكتملة') {
       statusColor = Colors.green;
       statusText = 'تم التسليم';
@@ -242,7 +238,7 @@ class _OrdersList extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: Colors.grey.withValues(alpha: 0.08),
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 2),
@@ -252,7 +248,9 @@ class _OrdersList extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: null, // Non-functional
+          onTap: () {
+           
+          }, // Non-functional
           borderRadius: BorderRadius.circular(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,7 +261,7 @@ class _OrdersList extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: Colors.grey.withOpacity(0.15),
+                      color: Colors.grey.withValues(alpha: 0.15),
                       width: 1,
                     ),
                   ),
@@ -292,8 +290,8 @@ class _OrdersList extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: order.paymentMethod == 'cash'
-                                    ? Colors.amber.withOpacity(0.1)
-                                    : Colors.blue.withOpacity(0.1),
+                                    ? Colors.amber.withValues(alpha: 0.1)
+                                    : Colors.blue.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
@@ -325,7 +323,7 @@ class _OrdersList extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.1),
+                        color: statusColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -426,7 +424,7 @@ class _OrdersList extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
+                            color: Colors.blue.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(

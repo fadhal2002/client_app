@@ -14,7 +14,7 @@ class LogoAndName extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: Colors.grey.withValues(alpha: 0.08),
             spreadRadius: 2,
             blurRadius: 20,
             offset: const Offset(0, 4),

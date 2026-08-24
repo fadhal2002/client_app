@@ -15,7 +15,7 @@ class LoginButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7B2FF7).withOpacity(0.4),
+            color: const Color(0xFF7B2FF7).withValues(alpha: 0.4),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

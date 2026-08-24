@@ -33,7 +33,7 @@ class LoginView extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF7B2FF7), Color(0xFF9D4EDD), Color(0xFFE0AAFF)],
+            colors: [Color(0xFF7B2FF7), Color(0xFF9D4EDD ), Color(0xFFE0AAFF), ],
           ),
         ),
         child: Form(
@@ -52,7 +52,7 @@ class LoginView extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -62,9 +62,9 @@ class LoginView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        const WelcomeHeading(), // (make sure inside widget text is translated)
+                        const WelcomeHeading(), 
                         const SizedBox(height: 8),
-                        const AuthPhoneHint(), // (make sure inside widget text is translated)
+                        const AuthPhoneHint(), 
                       ],
                     ),
                   ),
@@ -75,7 +75,7 @@ class LoginView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(32),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.deepPurple.withOpacity(0.2),
+                          color: Colors.deepPurple.withValues(alpha: 0.2),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),

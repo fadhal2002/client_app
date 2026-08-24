@@ -132,7 +132,7 @@ Widget _buildRideOptionCard({
     child: Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isSelected ? color.withOpacity(0.1) : Colors.white,
+        color: isSelected ? color.withValues(alpha: 0.1) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isSelected ? color : Colors.grey[200]!,
@@ -172,7 +172,7 @@ Widget _buildRideOptionCard({
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(

@@ -1,5 +1,6 @@
 import 'package:client_app/screen/widget/home/settings/profile_section.dart';
 import 'package:client_app/screen/widget/home/settings/settings_section.dart';
+import 'package:client_app/screen/widget/home/settings/sign_out_section.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -28,9 +29,22 @@ class SettingsScreen extends StatelessWidget {
           // Profile Section
           ProfileSection(),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 35),
 
-          const SizedBox(height: 16),
+          SettingsSection(
+            title: 'الإعدادات',
+            items: [
+              SettingsItem(
+                icon: Icons.location_on_outlined,
+                title: 'إعداد الموقع',
+                onTap: () {
+                  Navigator.pushNamed(context, '/WarehouseAddressScreen');
+                },
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 35),
 
           SettingsSection(
             title: 'الدعم',
@@ -48,6 +62,19 @@ class SettingsScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, '/AboutUsScreen');
                 },
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 35),
+
+          SettingsSection(
+            title: 'الحساب',
+            items: [
+              SettingsItem(
+                icon: Icons.logout_outlined,
+                title: 'تسجيل الخروج',
+                onTap: () => showSignOutDialog(context),
               ),
             ],
           ),

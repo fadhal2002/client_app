@@ -8,7 +8,7 @@ class TermAndPrivacyText extends StatelessWidget {
     return Text(
       'بالتسجيل، فإنك توافق على الشروط والأحكام وسياسة الخصوصية الخاصة بنا.',
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.7)),
+      style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7)),
     );
   }
 }

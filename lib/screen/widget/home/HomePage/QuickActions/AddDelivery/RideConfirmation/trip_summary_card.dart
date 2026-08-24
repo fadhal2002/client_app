@@ -26,7 +26,7 @@ class TripSummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.05),
+            color: Colors.grey.withValues(alpha: 0.05),
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 2),
@@ -39,7 +39,7 @@ class TripSummaryCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF4158D0).withOpacity(0.05),
+              color: const Color(0xFF4158D0).withValues(alpha: 0.05),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
@@ -118,7 +118,7 @@ class TripSummaryCard extends StatelessWidget {
                   icon: Icons.attach_money,
                   label: 'السعر',
                   value:
-                      '${model.formatPrice(model.calculatePrice(distance, duration, 'economy'))}',
+                      model.formatPrice(model.calculatePrice(distance, duration, 'economy')),
                 ),
               ],
             ),
@@ -141,7 +141,7 @@ Widget _buildLocationItem({
       Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.1),
+          color: iconColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon, color: iconColor, size: 20),

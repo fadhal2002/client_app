@@ -5,8 +5,6 @@ import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; 
 
 class RouteMapScreen extends StatefulWidget {
   final LatLng? selectedPoint;

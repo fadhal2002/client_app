@@ -12,8 +12,12 @@ class VerifyButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         if (model.UserEnteredCode == model.VerificationCode) {
+          model
+              .getAppServices(context)
+              .shared
+              .setString('phoneNumber', model.phoneNumber.text.trim());
           customSnackbar('نجاح', 'تم التحقق بنجاح!');
-          Navigator.pushNamed(context, '/NameInput');
+          Navigator.pushNamed(context, '/NameInputAndAccountType');
         } else {
           customSnackbar('خطأ', 'رمز OTP غير صحيح. يرجى المحاولة مرة أخرى.');
         }

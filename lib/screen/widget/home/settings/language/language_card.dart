@@ -27,7 +27,7 @@ class LanguageCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF4158D0).withOpacity(0.05)
+              ? const Color(0xFF4158D0).withValues(alpha: 0.05)
               : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -37,7 +37,7 @@ class LanguageCard extends StatelessWidget {
           boxShadow: [
             if (!isSelected)
               BoxShadow(
-                color: Colors.grey.withOpacity(0.05),
+                color: Colors.grey.withValues(alpha: 0.05),
                 spreadRadius: 1,
                 blurRadius: 8,
                 offset: const Offset(0, 2),
@@ -52,7 +52,7 @@ class LanguageCard extends StatelessWidget {
               height: 56,
               decoration: BoxDecoration(
                 color: isSelected
-                    ? const Color(0xFF4158D0).withOpacity(0.1)
+                    ? const Color(0xFF4158D0).withValues(alpha: 0.1)
                     : Colors.grey[100],
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -109,6 +109,5 @@ class LanguageCard extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

@@ -2,11 +2,11 @@ import 'package:client_app/core/functions/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/models/auth/login_model.dart';
 import 'package:client_app/screen/widget/auth/Login/phone_number_input.dart';
+import 'package:client_app/screen/widget/auth/NameInputAndAccountType/account_type_card.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
-import 'package:client_app/screen/widget/auth/UserName/name_field.dart';
+import 'package:client_app/screen/widget/auth/NameInputAndAccountType/name_field.dart';
 import 'package:client_app/screen/widget/header_ilustration.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatelessWidget {
@@ -26,8 +26,10 @@ class EditProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppServices appServices = Provider.of<AppServices>(context, listen: false);
-    final loginModel = context.watch<LoginModelImp>();
+    print(
+      '============================================ EditProfileView build called',
+    );
+    final loginModel = context.read<LoginModelImp>();
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
@@ -86,39 +88,49 @@ class EditProfileView extends StatelessWidget {
 
                 const SizedBox(height: 32),
 
+                Selector<LoginModelImp, String?>(
+                  selector: (context, model) => model.selectedAccountType,
+                  builder: (context, selectedAccountType, child) {
+                    return AccountTypeCard(
+                      title: 'حساب تجاري',
+                      description:
+                          'يفتح المحفظة، ورفع الطلبات بالجملة عبر متجر /بيج Excel، وتقارير المبيعات.',
+                      icon: Icons.business_center,
+                      isBusiness: true,
+                      isSelected: selectedAccountType == 'business',
+                      onTap: () {
+                        final model = context.read<LoginModelImp>();
+                        model.setSelectedAccountType('business', context);
+                      },
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                Selector<LoginModelImp, String?>(
+                  selector: (context, model) => model.selectedAccountType,
+                  builder: (context, selectedAccountType, child) {
+                    return AccountTypeCard(
+                      title: 'حساب فردي',
+                      description:
+                          'لإرسال طرد شخصي بسيط من فرد لآخر بدون تعقيد.',
+                      icon: Icons.person_outline,
+                      isBusiness: false,
+                      isSelected: selectedAccountType == 'personal',
+                      onTap: () {
+                        final model = context.read<LoginModelImp>();
+                        model.setSelectedAccountType('personal', context);
+                      },
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 32),
+
                 ContinueButton(
                   onTap: () {
-                    if (loginModel.firstName.text.isEmpty ||
-                        loginModel.lastName.text.isEmpty ||
-                        !formKey.currentState!.validate()) {
-                      customSnackbar(
-                        'خطأ',
-                        'يرجى ملء جميع الحقول بشكل صحيح قبل المتابعة.',
-                      );
-                    } else {
-                      customSnackbar('نجاح', 'تم تحديث الملف الشخصي بنجاح.');
-
-                      appServices.shared.setString(
-                        'firstName',
-                        loginModel.firstName.text.trim(),
-                      );
-
-                      appServices.shared.setString(
-                        'lastName',
-                        loginModel.lastName.text.trim(),
-                      );
-
-                      appServices.shared.setString(
-                        'phoneNumber',
-                        loginModel.phoneNumber.text.trim(),
-                      );
-
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/HomePageState',
-                        (route) => false,
-                      );
-                    }
+                    loginModel.editProfile(context, formKey);
                   },
                 ),
               ],

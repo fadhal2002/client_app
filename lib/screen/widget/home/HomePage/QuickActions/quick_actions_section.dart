@@ -101,7 +101,7 @@ Widget _buildQuickAction({
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.05),
+              color: Colors.grey.withValues(alpha: 0.05),
               spreadRadius: 1,
               blurRadius: 8,
               offset: const Offset(0, 2),
@@ -113,7 +113,7 @@ Widget _buildQuickAction({
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 24, color: color),

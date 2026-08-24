@@ -8,26 +8,11 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class OtpVerification extends StatelessWidget {
-  final String? phoneNumber;
-
-  const OtpVerification({super.key, this.phoneNumber});
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => LoginModelImp(context),
-      child: const OtpVerificationView(),
-    );
-  }
-}
-
-class OtpVerificationView extends StatelessWidget {
-  const OtpVerificationView({super.key});
+  const OtpVerification({super.key});
 
   @override
   Widget build(BuildContext context) {
     final model = context.read<LoginModelImp>();
-
     return Scaffold(
       backgroundColor: const Color(0xFFE0AAFF),
       body: Container(
@@ -56,9 +41,7 @@ class OtpVerificationView extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                VerificationPrompt(
-                  phoneNumber: model.phoneNumber.text.trim(),
-                ),
+                VerificationPrompt(phoneNumber: model.phoneNumber.text.trim()),
 
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -70,7 +53,7 @@ class OtpVerificationView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(32),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.deepPurple.withOpacity(0.2),
+                        color: Colors.deepPurple.withValues(alpha: 0.2),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),

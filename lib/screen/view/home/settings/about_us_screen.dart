@@ -4,7 +4,6 @@ import 'package:client_app/screen/widget/home/settings/AboutUs/key_features_card
 import 'package:client_app/screen/widget/home/settings/AboutUs/logo_and_name.dart';
 import 'package:client_app/screen/widget/home/settings/AboutUs/mission_card.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
