@@ -1,4 +1,4 @@
-import 'package:client_app/models/auth/login_model.dart';
+import 'package:client_app/models/login_model.dart';
 import 'package:client_app/screen/widget/auth/Login/auth_phone_hint.dart';
 import 'package:client_app/screen/widget/auth/Login/login_button.dart';
 import 'package:client_app/screen/widget/auth/Login/phone_number_input.dart';

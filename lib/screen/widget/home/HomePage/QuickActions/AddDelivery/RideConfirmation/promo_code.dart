@@ -1,4 +1,4 @@
-import 'package:client_app/models/home/HomePage/AddDelivery/ride_confirmation_model.dart';
+import 'package:client_app/models/home/ride_confirmation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

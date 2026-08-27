@@ -1,4 +1,4 @@
-import 'package:client_app/core/functions/custom_snackbar.dart';
+import 'package:client_app/screen/widget/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

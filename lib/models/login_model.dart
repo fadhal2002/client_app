@@ -1,4 +1,4 @@
-import 'package:client_app/core/functions/custom_snackbar.dart';
+import 'package:client_app/screen/widget/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/view/auth/otp_verification.dart';
 import 'package:client_app/screen/view/auth/ware_house_address_screen.dart';

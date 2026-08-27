@@ -1,4 +1,4 @@
-import 'package:client_app/models/auth/login_model.dart';
+import 'package:client_app/models/login_model.dart';
 import 'package:client_app/screen/widget/auth/WareHouseAddress/address_input_field.dart';
 import 'package:client_app/screen/widget/auth/WareHouseAddress/city_dropdown_field.dart';
 import 'package:client_app/screen/widget/auth/WareHouseAddress/location_picker_field.dart';

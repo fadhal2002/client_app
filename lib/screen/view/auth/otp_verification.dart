@@ -1,4 +1,4 @@
-import 'package:client_app/models/auth/login_model.dart';
+import 'package:client_app/models/login_model.dart';
 import 'package:client_app/screen/widget/auth/OtpVerification/otp_input_field.dart';
 import 'package:client_app/screen/widget/auth/OtpVerification/resend_code_section.dart';
 import 'package:client_app/screen/widget/auth/OtpVerification/verification_prompt.dart';

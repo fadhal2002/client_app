@@ -1,4 +1,4 @@
-import 'package:client_app/models/home/HomePage/AddDelivery/ride_confirmation_model.dart';
+import 'package:client_app/models/home/ride_confirmation_model.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
 import 'package:client_app/screen/widget/custom_app_bar.dart';
 import 'package:client_app/screen/widget/home/HomePage/QuickActions/AddDelivery/RideConfirmation/payment_method.dart';

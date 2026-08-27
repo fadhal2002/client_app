@@ -1,5 +1,5 @@
-import 'package:client_app/core/functions/custom_snackbar.dart';
-import 'package:client_app/models/auth/login_model.dart';
+import 'package:client_app/screen/widget/custom_snackbar.dart';
+import 'package:client_app/models/login_model.dart';
 import 'package:client_app/screen/widget/auth/NameInputAndAccountType/account_type_card.dart';
 import 'package:client_app/screen/widget/auth/NameInputAndAccountType/name_field_card.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
