@@ -6,12 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
 abstract class MapModel extends ChangeNotifier {
   Future<void> getOSMSuggestions(String query);
   Future<void> saveLocationToFirestore(BuildContext context);
+  Future<String> getAddressFromLatLng(LatLng point);
+  Future<void> getRoute(LatLng destination, LatLng start);
   void selectLocation(dynamic item);
   void changeSelectedPoint(LatLng point);
   void clearSuggestions();
@@ -19,15 +22,23 @@ abstract class MapModel extends ChangeNotifier {
   void moveToCurrentLocation(BuildContext context, MapModelImpl mapModel);
 
   final MapController mapController = MapController();
+  final MapController mapController2 = MapController();
   final TextEditingController searchController = TextEditingController();
+
+  String distance = "";
+  String duration = "";
 
   double currentZoom = 12.0;
 
   bool isLoading = false;
 
   List<dynamic> suggestions = [];
+  List<LatLng> routePoints = [];
 
   LatLng selectedPoint = const LatLng(32.0259, 44.3615);
+  LatLng? dropOffPoint;
+  // LatLng get dropOffPoint => _dropOffPointNotNull(dropOffPoint);
+  LatLng get pickUpPoint => selectedPoint;
 }
 
 class MapModelImpl extends MapModel {
@@ -134,6 +145,10 @@ class MapModelImpl extends MapModel {
   void clearSuggestions() {
     searchController.clear();
     suggestions = [];
+    routePoints = [];
+    dropOffPoint = null;
+    distance = "";
+    duration = "";
     notifyListeners();
   }
 
@@ -203,5 +218,66 @@ class MapModelImpl extends MapModel {
     }
     isLoading = false;
     notifyListeners();
+  }
+
+  Future<String> getAddressFromLatLng(LatLng point) async {
+    final url =
+        "https://nominatim.openstreetmap.org/reverse"
+        "?lat=${point.latitude}"
+        "&lon=${point.longitude}"
+        "&format=json"
+        "&accept-language=ar";
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"User-Agent": "FlutterApp"},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['display_name'] ?? "عنوان غير معروف";
+      }
+    } catch (e) {
+      print("❌ خطأ في جلب العنوان: $e");
+    }
+
+    return "عنوان غير معروف";
+  }
+
+  @override
+  Future<void> getRoute(LatLng destination, LatLng start) async {
+    dropOffPoint = destination;
+    notifyListeners();
+
+    final url = Uri.parse(
+      'https://router.project-osrm.org/route/v1/driving/'
+      '${start.longitude},${start.latitude};'
+      '${destination.longitude},${destination.latitude}'
+      '?overview=full&geometries=polyline',
+    );
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['routes'] != null && data['routes'].isNotEmpty) {
+          final route = data['routes'][0];
+
+          // فك تشفير المسار
+          final decodedPoints = decodePolyline(route['geometry']);
+
+          routePoints = decodedPoints
+              .map((point) => LatLng(point[0].toDouble(), point[1].toDouble()))
+              .toList();
+
+          distance = "${(route['distance'] / 1000).toStringAsFixed(1)} كم";
+          duration = "${(route['duration'] / 60).toStringAsFixed(0)} دقيقة";
+          notifyListeners();
+        }
+      }
+    } catch (e) {
+      print("❌ خطأ في حساب الطريق: $e");
+    }
   }
 }

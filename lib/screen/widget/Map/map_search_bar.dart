@@ -8,6 +8,7 @@ class MapSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapModel = context.read<MapModelImpl>();
+    print('============================ 3 ============================');
 
     return Positioned(
       top: 48,

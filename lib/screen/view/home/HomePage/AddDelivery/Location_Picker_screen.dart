@@ -50,9 +50,8 @@ class LocationPickerScreenView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RouteMapScreen(
-                          selectedPoint: mapModel.selectedPoint,
-                        ),
+                        builder: (context) =>
+                            RouteMapScreen(pickUpPoint: mapModel.selectedPoint),
                       ),
                     );
                   },
