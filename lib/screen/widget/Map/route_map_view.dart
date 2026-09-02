@@ -39,108 +39,108 @@ class RouteMapView extends StatelessWidget {
                   ),
                 ],
         ),
-      MarkerLayer(
-  markers: [
-    // Pickup marker (Green)
-    Marker(
-      rotate: true,
-      point: pickUpPoint,
-      width: 50,
-      height: 90,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.green,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.4),
-                  blurRadius: 20,
-                  spreadRadius: 6,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.location_on_rounded,
-              color: Colors.white,
-              size: 22,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 2),
-            width: 4,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.green,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.6),
-                  blurRadius: 8,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    
-    // Dropoff marker (Red)
-    if (mapModel.dropOffPoint != null)
-      Marker(
-        rotate: true,
-        point: mapModel.dropOffPoint!,
-        width: 50,
-        height: 90,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withOpacity(0.4),
-                    blurRadius: 20,
-                    spreadRadius: 6,
-                    offset: const Offset(0, 4),
+        MarkerLayer(
+          markers: [
+            // Pickup marker (Green)
+            Marker(
+              rotate: true,
+              point: pickUpPoint,
+              width: 50,
+              height: 90,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.green.withOpacity(0.4),
+                          blurRadius: 20,
+                          spreadRadius: 6,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.location_on_rounded,
+                      color: Colors.white,
+                      size: 22,
+                    ),
                   ),
-                ],
-              ),
-              child: const Icon(
-                Icons.location_on_rounded,
-                color: Colors.white,
-                size: 22,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 2),
-              width: 4,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withOpacity(0.6),
-                    blurRadius: 8,
-                    spreadRadius: 2,
+                  Container(
+                    margin: const EdgeInsets.only(top: 2),
+                    width: 4,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.green.withOpacity(0.6),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
+
+            // Dropoff marker (Red)
+            if (mapModel.dropOffPoint != null)
+              Marker(
+                rotate: true,
+                point: mapModel.dropOffPoint!,
+                width: 50,
+                height: 90,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.4),
+                            blurRadius: 20,
+                            spreadRadius: 6,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.location_on_rounded,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 2),
+                      width: 4,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.6),
+                            blurRadius: 8,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
-      ),
-  ],
-),
       ],
     );
   }

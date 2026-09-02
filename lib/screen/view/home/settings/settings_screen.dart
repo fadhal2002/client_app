@@ -1,3 +1,4 @@
+import 'package:client_app/screen/view/home/settings/locations_screen.dart';
 import 'package:client_app/screen/widget/home/settings/profile_section.dart';
 import 'package:client_app/screen/widget/home/settings/settings_section.dart';
 import 'package:client_app/screen/widget/home/settings/sign_out_section.dart';
@@ -38,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
                 icon: Icons.location_on_outlined,
                 title: 'إعداد الموقع',
                 onTap: () {
-                  Navigator.pushNamed(context, '/WarehouseAddressScreen');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LocationsScreen()));
                 },
               ),
             ],

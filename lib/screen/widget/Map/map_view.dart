@@ -9,7 +9,6 @@ class MapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapModel = context.watch<MapModelImpl>();
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FC),
       body: Padding(
@@ -19,7 +18,8 @@ class MapView extends StatelessWidget {
           child: FlutterMap(
             mapController: mapModel.mapController,
             options: MapOptions(
-              initialCenter: mapModel.selectedPoint,
+              initialCenter:
+                  mapModel.getSavedLatLng(context) ?? mapModel.selectedPoint,
               initialZoom: mapModel.currentZoom,
               onTap: (tapPosition, point) {
                 mapModel.changeSelectedPoint(point);

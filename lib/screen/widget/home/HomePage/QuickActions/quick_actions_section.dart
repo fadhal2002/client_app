@@ -1,4 +1,5 @@
 import 'package:client_app/screen/view/home/HomePage/AddDelivery/Location_Picker_screen.dart';
+import 'package:client_app/screen/view/home/HomePage/AddDelivery/package_source_screen.dart';
 import 'package:client_app/screen/view/home/HomePage/orders_history_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -45,12 +46,11 @@ class QuickActionsSection extends StatelessWidget {
                 title: 'طلب توصيل جديد',
                 color: const Color(0xFF4158D0),
                 onTap: () {
-                  Navigator.pushAndRemoveUntil(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LocationPickerScreen(),
+                      builder: (context) => const PackageSourceScreen(),
                     ),
-                    (route) => false,
                   );
                 },
               ),

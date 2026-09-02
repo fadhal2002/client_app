@@ -1,10 +1,12 @@
 import 'package:client_app/models/login_model.dart';
+import 'package:client_app/screen/view/home/HomePage/AddDelivery/Location_Picker_screen.dart';
 import 'package:client_app/screen/widget/auth/WareHouseAddress/address_input_field.dart';
 import 'package:client_app/screen/widget/auth/WareHouseAddress/city_dropdown_field.dart';
 import 'package:client_app/screen/widget/auth/WareHouseAddress/location_picker_field.dart';
 import 'package:flutter/material.dart';
 import 'package:client_app/screen/widget/continue_button.dart';
 import 'package:client_app/screen/widget/header_ilustration.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class WarehouseAddressScreen extends StatefulWidget {
@@ -15,17 +17,40 @@ class WarehouseAddressScreen extends StatefulWidget {
 }
 
 class _WarehouseAddressScreenState extends State<WarehouseAddressScreen> {
+  LatLng? _selectedLocation;
+  String _selectedAddress = '';
+
+  void _updateLocation(LatLng location, String address) {
+    setState(() {
+      _selectedLocation = location;
+      _selectedAddress = address;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginModelImp>(
       create: (context) => LoginModelImp(context),
-      child: const WareHouseAddressScreenView(),
+      child: WareHouseAddressScreenView(
+        onLocationSelected: _updateLocation,
+        selectedLocation: _selectedLocation,
+        selectedAddress: _selectedAddress,
+      ),
     );
   }
 }
 
 class WareHouseAddressScreenView extends StatelessWidget {
-  const WareHouseAddressScreenView({super.key});
+  final Function(LatLng, String) onLocationSelected;
+  final LatLng? selectedLocation;
+  final String selectedAddress;
+
+  const WareHouseAddressScreenView({
+    super.key,
+    required this.onLocationSelected,
+    this.selectedLocation,
+    this.selectedAddress = '',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +88,7 @@ class WareHouseAddressScreenView extends StatelessWidget {
                     'قم بتحديد موقع البيع أو المخزن الرئيسي لتسهيل عملية الطلب',
                 icon: Icons.storefront,
               ),
-
               const SizedBox(height: 32),
-
-              // Address Form Card
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -83,6 +105,13 @@ class WareHouseAddressScreenView extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
+                    AddressInputField(
+                      label: 'اسم الموقع',
+                      hint: 'مثال: المنزل، العمل، المتجر',
+                      icon: Icons.home_outlined,
+                      controller: loginModel.locationNameController,
+                    ),
+                    const SizedBox(height: 16),
                     Selector<LoginModelImp, String?>(
                       selector: (context, loginModel) =>
                           loginModel.selectedCity,
@@ -100,8 +129,6 @@ class WareHouseAddressScreenView extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 16),
-
-                    // Neighborhood Text Field
                     AddressInputField(
                       label: 'المنطقة / الحي',
                       hint: 'أدخل اسم المنطقة أو الحي',
@@ -109,8 +136,6 @@ class WareHouseAddressScreenView extends StatelessWidget {
                       controller: loginModel.neighborhoodController,
                     ),
                     const SizedBox(height: 16),
-
-                    // Nearest Landmark
                     AddressInputField(
                       label: 'أقرب نقطة دالة',
                       hint: 'أدخل أقرب نقطة دالة (مثل: مقابل مجمع البركة)',
@@ -118,33 +143,52 @@ class WareHouseAddressScreenView extends StatelessWidget {
                       controller: loginModel.landmarkController,
                     ),
                     const SizedBox(height: 16),
-
+                    // Updated LocationPickerField with location callback
                     LocationPickerField(
                       label: 'الموقع على الخريطة',
-                      hint: 'اضغط لتحديد الموقع على الخريطة',
+                      hint: selectedAddress.isNotEmpty
+                          ? selectedAddress
+                          : 'اضغط لتحديد الموقع على الخريطة',
                       icon: Icons.map_outlined,
+                      selectedLocation: selectedLocation,
+                      onLocationSelected: onLocationSelected,
                       onTap: () {
-                        print('Open map picker');
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => Container(
+                            height: MediaQuery.of(context).size.height,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(0),
+                              ),
+                            ),
+                            child: LocationPickerScreen(
+                              isForLogin: true,
+                              onLocationSelected: (location, address) {
+                                onLocationSelected(location, address);
+                              },
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 24),
-              // Continue Button
               ContinueButton(
                 onTap: () {
                   loginModel.warehouseAddress(context);
                 },
               ),
-
               const SizedBox(height: 16),
             ],
           ),
         ),
       ),
     );
-    ;
   }
 }

@@ -4,6 +4,7 @@ import 'package:client_app/screen/view/auth/otp_verification.dart';
 import 'package:client_app/screen/view/auth/ware_house_address_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 abstract class LoginModel extends ChangeNotifier {
@@ -30,6 +31,7 @@ abstract class LoginModel extends ChangeNotifier {
   late TextEditingController lastName;
   late TextEditingController neighborhoodController;
   late TextEditingController landmarkController;
+  late TextEditingController locationNameController;
 
   final List<String> cities = [
     'بغداد',
@@ -77,6 +79,10 @@ class LoginModelImp extends LoginModel {
       text: appServices.shared.getString('landmark') ?? '',
     );
 
+    locationNameController = TextEditingController(
+      text: appServices.shared.getString('locationName') ?? '',
+    );
+
     selectedCity = appServices.shared.getString('selectedCity');
 
     selectedAccountType = appServices.shared.getString('accountType');
@@ -89,6 +95,7 @@ class LoginModelImp extends LoginModel {
     phoneNumber.dispose();
     firstName.dispose();
     lastName.dispose();
+    locationNameController.dispose();
     super.dispose();
   }
 
@@ -273,7 +280,9 @@ class LoginModelImp extends LoginModel {
 
     if (selectedCity == null ||
         neighborhoodController.text.isEmpty ||
-        landmarkController.text.isEmpty) {
+        landmarkController.text.isEmpty ||
+        locationNameController.text.isEmpty ||
+        appServices.getSavedLatLng(context).isBlank!) {
       customSnackbar('خطأ', 'يرجى ملء جميع الحقول بشكل صحيح قبل المتابعة.');
     } else {
       customSnackbar('نجاح', 'تم حفظ عنوان المستودع بنجاح.');
@@ -286,6 +295,11 @@ class LoginModelImp extends LoginModel {
       );
 
       appServices.shared.setString('landmark', landmarkController.text.trim());
+
+      appServices.shared.setString(
+        'locationName',
+        locationNameController.text.trim(),
+      );
 
       Navigator.pushNamedAndRemoveUntil(
         context,

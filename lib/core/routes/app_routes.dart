@@ -13,7 +13,7 @@ import 'package:client_app/screen/view/home/settings/about_us_screen.dart';
 import 'package:client_app/screen/view/home/settings/edit_profile_screen.dart';
 import 'package:client_app/screen/view/home/settings/help_center_screen.dart';
 import 'package:client_app/screen/view/home/settings/language_screen.dart';
-import 'package:client_app/screen/view/home/settings/location_setup_screen.dart';
+import 'package:client_app/screen/view/home/settings/add_location_screen.dart';
 import 'package:client_app/screen/view/home/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
@@ -48,11 +48,13 @@ class AppRoutes {
       editProfileScreen: (context) => const EditProfileScreen(),
       aboutUsScreen: (context) => const AboutUsScreen(),
       helpCenterScreen: (context) => const HelpCenterScreen(),
-      routeMapScreen: (context) => RouteMapScreen(pickUpPoint: ModalRoute.of(context)!.settings.arguments as LatLng),
+      routeMapScreen: (context) => RouteMapScreen(
+        pickUpPoint: ModalRoute.of(context)!.settings.arguments as LatLng,
+      ),
       ordersHistoryScreen: (context) => OrdersHistoryScreen(),
-      locationPickerScreen : (context) => LocationPickerScreen(),
-      locationSetupScreen : (context) => LocationSetupScreen(),
-      warehouseAddressScreen : (context) => WarehouseAddressScreen(),
+      locationPickerScreen: (context) => LocationPickerScreen(),
+      locationSetupScreen: (context) => LocationSetupScreen(),
+      warehouseAddressScreen: (context) => WarehouseAddressScreen(),
     };
   }
 }

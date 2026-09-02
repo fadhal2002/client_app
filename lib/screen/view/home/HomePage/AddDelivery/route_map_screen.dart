@@ -45,12 +45,8 @@ class RouteMapScreenView extends StatelessWidget {
                 right: 20,
                 child: ContinueButton(
                   onTap: () async {
-                    print(
-                      '============================ 5 ============================',
-                    );
-
                     final address = await mapModel.getAddressFromLatLng(
-                      mapModel.pickUpPoint,
+                      pickUpPoint,
                     );
                     final dropOffAddress = await mapModel.getAddressFromLatLng(
                       mapModel.dropOffPoint!,

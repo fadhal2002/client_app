@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/widget/custom_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,17 +9,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 abstract class MapModel extends ChangeNotifier {
   Future<void> getOSMSuggestions(String query);
   Future<void> saveLocationToFirestore(BuildContext context);
   Future<String> getAddressFromLatLng(LatLng point);
   Future<void> getRoute(LatLng destination, LatLng start);
+  Future<void> saveLatLng(LatLng location, BuildContext context);
   void selectLocation(dynamic item);
   void changeSelectedPoint(LatLng point);
   void clearSuggestions();
   void changeZoom(double zoom);
   void moveToCurrentLocation(BuildContext context, MapModelImpl mapModel);
+  LatLng? getSavedLatLng(BuildContext context);
 
   final MapController mapController = MapController();
   final MapController mapController2 = MapController();
@@ -28,21 +31,22 @@ abstract class MapModel extends ChangeNotifier {
   String distance = "";
   String duration = "";
 
-  double currentZoom = 12.0;
+  double currentZoom = 14.0;
 
   bool isLoading = false;
 
-  List<dynamic> suggestions = [];
+  List<Map<String, dynamic>> suggestions = [];
   List<LatLng> routePoints = [];
 
   LatLng selectedPoint = const LatLng(32.0259, 44.3615);
   LatLng? dropOffPoint;
-  // LatLng get dropOffPoint => _dropOffPointNotNull(dropOffPoint);
   LatLng get pickUpPoint => selectedPoint;
 }
 
 class MapModelImpl extends MapModel {
-  MapModelImpl(BuildContext context) {}
+  MapModelImpl(BuildContext context) {
+    selectedPoint = getSavedLatLng(context) ?? const LatLng(32.0259, 44.3615);
+  }
 
   @override
   Future<void> getOSMSuggestions(String query) async {
@@ -62,10 +66,12 @@ class MapModelImpl extends MapModel {
 
     try {
       final response = await http.get(Uri.parse(url));
-
       if (response.statusCode == 200) {
-        suggestions = json.decode(response.body);
-        notifyListeners();
+        final data = json.decode(response.body);
+        if (data is List) {
+          suggestions = data.cast<Map<String, dynamic>>();
+          notifyListeners();
+        }
       }
     } catch (e) {
       print("❌ خطأ البحث المحلي: $e");
@@ -220,6 +226,7 @@ class MapModelImpl extends MapModel {
     notifyListeners();
   }
 
+  @override
   Future<String> getAddressFromLatLng(LatLng point) async {
     final url =
         "https://nominatim.openstreetmap.org/reverse"
@@ -279,5 +286,27 @@ class MapModelImpl extends MapModel {
     } catch (e) {
       print("❌ خطأ في حساب الطريق: $e");
     }
+  }
+
+  @override
+  Future<void> saveLatLng(LatLng location, BuildContext context) async {
+    final appServices = Provider.of<AppServices>(context, listen: false);
+
+    await appServices.shared.setDouble('latitude', location.latitude);
+    await appServices.shared.setDouble('longitude', location.longitude);
+  }
+
+  @override
+  LatLng? getSavedLatLng(BuildContext context) {
+    final appServices = Provider.of<AppServices>(context, listen: false);
+
+    final latitude = appServices.shared.getDouble('latitude');
+    final longitude = appServices.shared.getDouble('longitude');
+
+    if (latitude == null || longitude == null) {
+      return null;
+    }
+
+    return LatLng(latitude, longitude);
   }
 }

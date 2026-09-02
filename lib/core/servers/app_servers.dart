@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppServices extends ChangeNotifier {
@@ -32,5 +34,18 @@ class AppServices extends ChangeNotifier {
     await shared.setBool(loginKey, false);
     _isLoggedIn = false;
     notifyListeners();
+  }
+
+  LatLng? getSavedLatLng(BuildContext context) {
+    final appServices = Provider.of<AppServices>(context, listen: false);
+
+    final latitude = appServices.shared.getDouble('latitude');
+    final longitude = appServices.shared.getDouble('longitude');
+
+    if (latitude == null || longitude == null) {
+      return null;
+    }
+
+    return LatLng(latitude, longitude);
   }
 }
