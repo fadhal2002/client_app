@@ -1,3 +1,5 @@
+import 'package:client_app/screen/view/home/settings/ware_house_address_screen.dart';
+import 'package:client_app/screen/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class LocationsScreen extends StatefulWidget {
@@ -9,11 +11,11 @@ class LocationsScreen extends StatefulWidget {
 
 class _LocationsScreenState extends State<LocationsScreen> {
   // Sample data (non-functional)
-  List<Map<String, dynamic>> _savedAddresses = [
+  final List<Map<String, dynamic>> _savedAddresses = [
     {
       'id': '1',
       'name': 'المنزل',
-      'address': 'شارع الربيع، بغداد',  
+      'address': 'شارع الربيع، بغداد',
       'neighborhood': 'الكرادة',
       'icon': Icons.home_rounded,
     },
@@ -46,78 +48,9 @@ class _LocationsScreenState extends State<LocationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FC),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          'عناويني المحفوظة',
-          style: TextStyle(
-            color: Color(0xFF1A1E2C),
-            fontWeight: FontWeight.w600,
-            fontSize: 24,
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          color: const Color(0xFF1A1E2C),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.add_rounded,
-              color: Color(0xFF4F46E5),
-              size: 28,
-            ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('سيتم إضافة عنوان جديد قريباً'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(title: 'عناويني المحفوظة'),
       body: Column(
         children: [
-          // Info banner
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF4F46E5).withOpacity(0.08),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFF4F46E5).withOpacity(0.2),
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.info_outline_rounded,
-                  color: const Color(0xFF4F46E5),
-                  size: 20,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'يمكنك إدارة عناوينك بسهولة. اختر العنوان المفضل لتسريع عملية الطلب.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade700,
-                      height: 1.4,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          const SizedBox(height: 8),
-          
           // Addresses list
           Expanded(
             child: ListView.builder(
@@ -126,16 +59,16 @@ class _LocationsScreenState extends State<LocationsScreen> {
               itemBuilder: (context, index) {
                 final address = _savedAddresses[index];
                 final isSelected = _selectedAddressId == address['id'];
-                
+
                 return Container(
                   margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
-                    color: isSelected 
+                    color: isSelected
                         ? const Color(0xFF4F46E5).withOpacity(0.05)
                         : Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isSelected 
+                      color: isSelected
                           ? const Color(0xFF4F46E5)
                           : Colors.grey.shade200,
                       width: isSelected ? 2 : 1,
@@ -159,14 +92,16 @@ class _LocationsScreenState extends State<LocationsScreen> {
                         leading: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: isSelected 
+                            color: isSelected
                                 ? const Color(0xFF4F46E5)
                                 : const Color(0xFF4F46E5).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
                             address['icon'],
-                            color: isSelected ? Colors.white : const Color(0xFF4F46E5),
+                            color: isSelected
+                                ? Colors.white
+                                : const Color(0xFF4F46E5),
                             size: 22,
                           ),
                         ),
@@ -175,7 +110,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: isSelected 
+                            color: isSelected
                                 ? const Color(0xFF4F46E5)
                                 : const Color(0xFF1A1E2C),
                           ),
@@ -231,7 +166,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                           });
                         },
                       ),
-                      
+
                       // Action buttons
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -253,7 +188,9 @@ class _LocationsScreenState extends State<LocationsScreen> {
                               onPressed: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('تعديل العنوان غير متاح حالياً'),
+                                    content: Text(
+                                      'تعديل العنوان غير متاح حالياً',
+                                    ),
                                     duration: Duration(seconds: 2),
                                   ),
                                 );
@@ -278,9 +215,9 @@ class _LocationsScreenState extends State<LocationsScreen> {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                             ),
-                            
+
                             const SizedBox(width: 8),
-                            
+
                             // Delete
                             TextButton.icon(
                               onPressed: () {
@@ -315,7 +252,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
               },
             ),
           ),
-          
+
           // Add Address Button at bottom
           Padding(
             padding: const EdgeInsets.all(20),
@@ -324,20 +261,17 @@ class _LocationsScreenState extends State<LocationsScreen> {
               height: 48,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('سيتم إضافة عنوان جديد قريباً'),
-                      duration: Duration(seconds: 2),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WareHouseAddressScreen(),
                     ),
                   );
                 },
                 icon: const Icon(Icons.add_rounded, size: 20),
                 label: const Text(
                   'إضافة عنوان جديد',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4F46E5),
@@ -367,10 +301,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
             children: [
               Text(
                 'هل أنت متأكد من رغبتك في حذف هذا العنوان؟',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade700,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
               ),
               const SizedBox(height: 8),
               Container(
@@ -407,16 +338,13 @@ class _LocationsScreenState extends State<LocationsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'إلغاء',
-                style: TextStyle(color: Colors.grey),
-              ),
+              child: const Text('إلغاء', style: TextStyle(color: Colors.grey)),
             ),
             TextButton(
               onPressed: () {
                 setState(() {
                   _savedAddresses.removeWhere(
-                    (item) => item['id'] == address['id']
+                    (item) => item['id'] == address['id'],
                   );
                 });
                 Navigator.pop(context);
@@ -427,10 +355,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                   ),
                 );
               },
-              child: const Text(
-                'حذف',
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text('حذف', style: TextStyle(color: Colors.red)),
             ),
           ],
         );

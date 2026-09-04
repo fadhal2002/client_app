@@ -1,17 +1,14 @@
-import 'dart:convert';
-
+import 'package:client_app/models/map_model.dart';
 import 'package:client_app/screen/widget/auth/WareHouseAddress/mini_map_view.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class LocationPickerField extends StatelessWidget {
   final String label;
   final String hint;
   final IconData icon;
   final VoidCallback onTap;
-  final LatLng? selectedLocation;
-  final Function(LatLng, String) onLocationSelected;
 
   const LocationPickerField({
     super.key,
@@ -19,12 +16,11 @@ class LocationPickerField extends StatelessWidget {
     required this.hint,
     required this.icon,
     required this.onTap,
-    this.selectedLocation,
-    required this.onLocationSelected,
   });
 
   @override
   Widget build(BuildContext context) {
+    final mapModel = context.read<MapModelImpl>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,7 +38,9 @@ class LocationPickerField extends StatelessWidget {
             ),
           ],
         ),
+
         const SizedBox(height: 8),
+
         GestureDetector(
           onTap: onTap,
           child: Container(
@@ -57,12 +55,7 @@ class LocationPickerField extends StatelessWidget {
                 Expanded(
                   child: Text(
                     hint,
-                    style: TextStyle(
-                      color: selectedLocation != null
-                          ? Colors.black
-                          : Colors.grey[400],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.black, fontSize: 14),
                   ),
                 ),
                 Container(
@@ -81,48 +74,23 @@ class LocationPickerField extends StatelessWidget {
             ),
           ),
         ),
+
         const SizedBox(height: 8),
-        // Mini map showing selected location
-        SizedBox(
-          height: 200,
-          width: double.infinity,
-          child: MiniMapView(
-            initialLocation: selectedLocation ?? const LatLng(32.0259, 44.3615),
-            onLocationChanged: (point) async {
-              // Get address from coordinates
-              final address = await _getAddressFromLatLng(point);
-              onLocationSelected(point, address);
-            },
-            isInteractive: false, // Make it read-only
-          ),
+
+        Selector<MapModelImpl, LatLng?>(
+          selector: (context, model) => model.selectedPoint,
+          builder: (context, selectedPoint, child) {
+            return SizedBox(
+              height: 200,
+              width: double.infinity,
+              child: MiniMapView(
+                initialLocation: selectedPoint ?? const LatLng(0, 0),
+                isInteractive: false,
+              ),
+            );
+          },
         ),
       ],
     );
-  }
-
-  Future<String> _getAddressFromLatLng(LatLng point) async {
-    // You can implement this using your existing method
-    final url =
-        "https://nominatim.openstreetmap.org/reverse"
-        "?lat=${point.latitude}"
-        "&lon=${point.longitude}"
-        "&format=json"
-        "&accept-language=ar";
-
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {"User-Agent": "FlutterApp"},
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return data['display_name'] ?? "عنوان غير معروف";
-      }
-    } catch (e) {
-      print("❌ خطأ في جلب العنوان: $e");
-    }
-
-    return "عنوان غير معروف";
   }
 }

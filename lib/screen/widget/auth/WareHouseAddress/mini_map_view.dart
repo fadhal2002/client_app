@@ -6,13 +6,11 @@ import 'package:provider/provider.dart';
 
 class MiniMapView extends StatefulWidget {
   final LatLng initialLocation;
-  final Function(LatLng) onLocationChanged;
   final bool isInteractive;
 
   const MiniMapView({
     super.key,
     required this.initialLocation,
-    required this.onLocationChanged,
     this.isInteractive = true,
   });
 
@@ -73,7 +71,6 @@ class _MiniMapViewState extends State<MiniMapView> {
               ? (tapPosition, point) {
                   setState(() {
                     _selectedPoint = point;
-                    widget.onLocationChanged(point);
                   });
                 }
               : null,

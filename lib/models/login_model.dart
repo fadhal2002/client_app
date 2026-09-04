@@ -1,10 +1,9 @@
 import 'package:client_app/screen/widget/custom_snackbar.dart';
 import 'package:client_app/core/servers/app_servers.dart';
 import 'package:client_app/screen/view/auth/otp_verification.dart';
-import 'package:client_app/screen/view/auth/ware_house_address_screen.dart';
+import 'package:client_app/screen/view/home/settings/ware_house_address_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 abstract class LoginModel extends ChangeNotifier {
@@ -12,8 +11,6 @@ abstract class LoginModel extends ChangeNotifier {
   void nameInputAndAccountType(BuildContext context);
   void setSelectedAccountType(String accountType, BuildContext context);
   void editProfile(BuildContext context, GlobalKey<FormState> formKey);
-  void warehouseAddress(BuildContext context);
-  void setSelectedCity(String city, BuildContext context);
   void startCountdown();
   void startInitialTimer();
   void resendCode();
@@ -24,36 +21,10 @@ abstract class LoginModel extends ChangeNotifier {
   String VerificationCode = '123456';
   String UserEnteredCode = '';
   String? selectedAccountType;
-  String? selectedCity;
 
   late TextEditingController phoneNumber;
   late TextEditingController firstName;
   late TextEditingController lastName;
-  late TextEditingController neighborhoodController;
-  late TextEditingController landmarkController;
-  late TextEditingController locationNameController;
-
-  final List<String> cities = [
-    'بغداد',
-    'البصرة',
-    'نينوى',
-    'أربيل',
-    'السليمانية',
-    'كركوك',
-    'دهوك',
-    'النجف',
-    'كربلاء',
-    'الديوانية',
-    'المثنى',
-    'ذي قار',
-    'واسط',
-    'ميسان',
-    'القادسية',
-    'الأنبار',
-    'صلاح الدين',
-    'ديالى',
-    'بابل',
-  ];
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 }
@@ -71,31 +42,14 @@ class LoginModelImp extends LoginModel {
       text: appServices.shared.getString('lastName') ?? '',
     );
 
-    neighborhoodController = TextEditingController(
-      text: appServices.shared.getString('neighborhood') ?? '',
-    );
-
-    landmarkController = TextEditingController(
-      text: appServices.shared.getString('landmark') ?? '',
-    );
-
-    locationNameController = TextEditingController(
-      text: appServices.shared.getString('locationName') ?? '',
-    );
-
-    selectedCity = appServices.shared.getString('selectedCity');
-
-    selectedAccountType = appServices.shared.getString('accountType');
+    selectedAccountType = appServices.shared.getString('accountType') ?? '';
   }
 
   @override
   void dispose() {
-    neighborhoodController.dispose();
-    landmarkController.dispose();
     phoneNumber.dispose();
     firstName.dispose();
     lastName.dispose();
-    locationNameController.dispose();
     super.dispose();
   }
 
@@ -115,9 +69,7 @@ class LoginModelImp extends LoginModel {
           );
           return userCredential.user;
         } catch (e) {
-          print(
-            '================================================ Sign in failed: $e',
-          );
+          customSnackbar('خطأ', 'فشل تسجيل الدخول: ${e.toString()}');
           return null;
         }
       }
@@ -140,14 +92,13 @@ class LoginModelImp extends LoginModel {
 
         // Code successfully sent - save verificationId
         codeSent: (String verificationId, int? resendToken) {
-          print(
-            '====================================== SMS code sent to ${phoneNumber.text}',
-          );
+          VerificationCode = verificationId;
+          customSnackbar('نجاح', 'تم إرسال رمز التحقق إلى رقم هاتفك.');
         },
 
         // Auto-retrieval timeout
         codeAutoRetrievalTimeout: (String verificationId) {
-          print('====================================== Auto-retrieval');
+          VerificationCode = verificationId;
         },
       );
       Navigator.push(
@@ -234,7 +185,7 @@ class LoginModelImp extends LoginModel {
       MaterialPageRoute(
         builder: (context) => ChangeNotifierProvider.value(
           value: this,
-          child: const WarehouseAddressScreen(),
+          child: const WareHouseAddressScreen(),
         ),
       ),
     );
@@ -272,49 +223,5 @@ class LoginModelImp extends LoginModel {
         (route) => false,
       );
     }
-  }
-
-  @override
-  void warehouseAddress(BuildContext context) {
-    final appServices = Provider.of<AppServices>(context, listen: false);
-
-    if (selectedCity == null ||
-        neighborhoodController.text.isEmpty ||
-        landmarkController.text.isEmpty ||
-        locationNameController.text.isEmpty ||
-        appServices.getSavedLatLng(context).isBlank!) {
-      customSnackbar('خطأ', 'يرجى ملء جميع الحقول بشكل صحيح قبل المتابعة.');
-    } else {
-      customSnackbar('نجاح', 'تم حفظ عنوان المستودع بنجاح.');
-
-      appServices.shared.setString('selectedCity', selectedCity!);
-
-      appServices.shared.setString(
-        'neighborhood',
-        neighborhoodController.text.trim(),
-      );
-
-      appServices.shared.setString('landmark', landmarkController.text.trim());
-
-      appServices.shared.setString(
-        'locationName',
-        locationNameController.text.trim(),
-      );
-
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/HomePageState',
-        (route) => false,
-      );
-    }
-  }
-
-  @override
-  void setSelectedCity(String city, BuildContext context) {
-    final appServices = Provider.of<AppServices>(context, listen: false);
-
-    selectedCity = city;
-    appServices.shared.setString('selectedCity', city);
-    notifyListeners();
   }
 }

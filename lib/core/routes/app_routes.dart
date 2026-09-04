@@ -1,7 +1,7 @@
 import 'package:client_app/screen/view/auth/login_screen.dart';
 import 'package:client_app/screen/view/auth/name_input_and_account_type.dart';
 import 'package:client_app/screen/view/auth/otp_verification.dart';
-import 'package:client_app/screen/view/auth/ware_house_address_screen.dart';
+import 'package:client_app/screen/view/home/settings/ware_house_address_screen.dart';
 import 'package:client_app/screen/view/home/HomePage/AddDelivery/Location_Picker_screen.dart';
 // import 'package:client_app/screen/view/home/HomePage/AddDelivery/Location_Picker_screen.dart';
 // import 'package:client_app/screen/view/home/HomePage/AddDelivery/ride_confirmation_screen.dart';
@@ -54,7 +54,7 @@ class AppRoutes {
       ordersHistoryScreen: (context) => OrdersHistoryScreen(),
       locationPickerScreen: (context) => LocationPickerScreen(),
       locationSetupScreen: (context) => LocationSetupScreen(),
-      warehouseAddressScreen: (context) => WarehouseAddressScreen(),
+      warehouseAddressScreen: (context) => WareHouseAddressScreen(),
     };
   }
 }
